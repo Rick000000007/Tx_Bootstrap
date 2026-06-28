@@ -7,10 +7,9 @@ license = GPL-2.0-or-later
 epoch = 0
 release = 1
 build_style = gnu
-extract_dir = psmisc-v23.7
 
 source =
-    https://gitlab.com/psmisc/psmisc/-/archive/v23.7/psmisc-v23.7.tar.gz    8f2526ce7ac6ef4976454cd63095fa10e467ef745cf33dc4f91df0bd7b10b905
+    http://deb.debian.org/debian/pool/main/p/psmisc/psmisc_23.7.orig.tar.xz    b7074e6446736484a0d959556e8726591024346903f044703a94892700305a39
 
 depends =
     ncurses
