@@ -14,6 +14,9 @@ source =
 pre_build_cmds =
     sed -i "s/cc.find_library('resolv')/cc.find_library('resolv', required : false)/g" meson.build
 
+env_vars =
+    LIBRARY_PATH=${DESTDIR}/data/data/tx.packages/files/usr/lib
+
 depends =
     libcap
 
