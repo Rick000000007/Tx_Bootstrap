@@ -1,0 +1,19 @@
+name = shadow
+version = 4.17.2
+category = system
+description = Password and account management tool suite
+homepage = https://github.com/shadow-maint/shadow
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/shadow-maint/shadow/releases/download/4.17.2/shadow-4.17.2.tar.xz    a21cf0d34bffc4314cede01cff258689174fab30ca494ae8f45784d3d56c9849
+
+depends =
+    acl
+    attr
+
+makedepends =
+

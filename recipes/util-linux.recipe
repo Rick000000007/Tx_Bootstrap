@@ -1,0 +1,20 @@
+name = util-linux
+version = 2.40.2
+category = system
+description = Random collection of Linux utilities
+homepage = https://github.com/util-linux/util-linux
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.2.tar.xz    d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3
+
+depends =
+    ncurses
+    zlib
+    readline
+
+makedepends =
+

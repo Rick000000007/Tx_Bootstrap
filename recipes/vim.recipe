@@ -1,0 +1,18 @@
+name = vim
+version = 9.1.1106
+category = editors
+description = Vi IMproved - text editor
+homepage = https://www.vim.org/
+license = Vim
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/vim/vim/archive/refs/tags/v9.1.1106.tar.gz    721e6d0d0fd4c95fa13808cf27ba976a6cf0fa225e77993d66dcecc20625f463
+
+depends =
+    ncurses
+
+makedepends =
+

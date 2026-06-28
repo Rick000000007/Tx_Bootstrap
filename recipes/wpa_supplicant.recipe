@@ -1,0 +1,24 @@
+name = wpa_supplicant
+version = 2.11
+category = networking
+description = WPA/WPA2/IEEE 802.1X Supplicant
+homepage = https://w1.fi/wpa_supplicant/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = make
+build_dir = wpa_supplicant
+pre_build_cmds =
+    cp defconfig .config
+
+source =
+    https://w1.fi/releases/wpa_supplicant-2.11.tar.gz    912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a
+
+depends =
+    openssl
+    libnl
+    dbus
+    readline
+
+makedepends =
+

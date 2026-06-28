@@ -1,0 +1,52 @@
+# TX-Packages Git Ignore
+
+# Build outputs
+output/
+artifacts/
+cache/
+sources/
+downloads/
+packages/
+bootstrap/bootstrap.tar.zst
+bootstrap/rootfs/
+
+# Repository generated files
+repository/Packages
+repository/Packages.json
+repository/SHA256SUMS
+repository/*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+tests/output/
+.pytest_cache/
+.coverage
+
+# Temporary files
+tmp/
+temp/
+*.tmp

@@ -1,0 +1,18 @@
+name = yaml
+version = 0.2.5
+category = libraries
+description = YAML 1.1 parser and emitter written in C
+homepage = https://github.com/yaml/libyaml
+license = MIT
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/yaml/libyaml/releases/download/0.2.5/yaml-0.2.5.tar.gz    c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
+
+depends =
+
+
+makedepends =
+

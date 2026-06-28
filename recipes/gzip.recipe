@@ -1,0 +1,18 @@
+name = gzip
+version = 1.13
+category = core-utils
+description = GNU Gzip
+homepage = https://www.gnu.org/software/gzip/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/gzip/gzip-1.13.tar.xz    7454eb6935db17c6655576c2e1b0fabefd38b4d0936e0f87f48cd062ce91a057
+
+depends =
+
+
+makedepends =
+

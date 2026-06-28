@@ -1,0 +1,16 @@
+name = libtirpc
+version = 1.3.4
+category = system
+description = Transport Independent RPC library
+homepage = https://linux-nfs.org/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://ftp.osuosl.org/pub/blfs/conglomeration/libtirpc/libtirpc-1.3.4.tar.bz2    1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860
+
+depends =
+
+makedepends =

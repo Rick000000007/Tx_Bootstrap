@@ -1,0 +1,19 @@
+name = tcpdump
+version = 4.99.5
+category = networking
+description = Network traffic capture and analysis tool
+homepage = https://www.tcpdump.org/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.tcpdump.org/release/tcpdump-4.99.5.tar.gz    8c75856e00addeeadf70dad67c9ff3dd368536b2b8563abf6854d7c764cd3adb
+
+depends =
+    libpcap
+    openssl
+
+makedepends =
+

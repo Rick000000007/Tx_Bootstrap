@@ -1,0 +1,22 @@
+name = rsync
+version = 3.4.1
+category = networking
+description = Fast incremental file transfer utility
+homepage = https://rsync.samba.org/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://rsync.samba.org/ftp/rsync/src/rsync-3.4.1.tar.gz    2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
+
+depends =
+    zlib
+    zstd
+    lz4
+    openssl
+    xxhash
+
+makedepends =
+

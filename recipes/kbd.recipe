@@ -1,0 +1,18 @@
+name = kbd
+version = 2.6.4
+category = system
+description = Linux keyboard tools
+homepage = https://kbd-project.org/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.kernel.org/pub/linux/utils/kbd/kbd-2.6.4.tar.xz    519f8d087aecca7e0a33cd084bef92c066eb19731666653dcc70c9d71aa40926
+
+depends =
+
+
+makedepends =
+

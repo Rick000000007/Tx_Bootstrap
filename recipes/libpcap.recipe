@@ -1,0 +1,18 @@
+name = libpcap
+version = 1.10.5
+category = networking
+description = System-independent interface for user-level packet capture
+homepage = https://www.tcpdump.org/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.tcpdump.org/release/libpcap-1.10.5.tar.gz    37ced90a19a302a7f32e458224a00c365c117905c2cd35ac544b6880a81488f0
+
+depends =
+    libnl
+
+makedepends =
+

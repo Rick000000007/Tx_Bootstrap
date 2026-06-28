@@ -1,0 +1,20 @@
+name = pciutils
+version = 3.13.0
+category = system
+description = PCI bus configuration space access library and tools
+homepage = https://mj.ucw.cz/sw/pciutils/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = make
+
+source =
+    https://mj.ucw.cz/download/linux/pci/pciutils-3.13.0.tar.gz    a03c88a0aab709b1697ca1753766f443e78297f84c7bcd80a82c1422edd7cb42
+
+depends =
+    zlib
+    kmod
+    hwdata
+
+makedepends =
+

@@ -1,0 +1,25 @@
+name = nmap
+version = 7.95
+category = networking
+description = Utility for network discovery and security auditing
+homepage = https://nmap.org/
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://nmap.org/dist/nmap-7.95.tar.bz2    e14ab530e47b5afd88f1c8a2bac7f89cd8fe6b478e22d255c5b9bddb7a1c5778
+
+build_dir = .
+
+depends =
+    openssl
+    libpcap
+    pcre2
+    libssh2
+    lua
+    zlib
+
+makedepends =
+

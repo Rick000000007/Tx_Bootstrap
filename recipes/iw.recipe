@@ -1,0 +1,18 @@
+name = iw
+version = 6.9
+category = system
+description = nl80211 based CLI configuration utility for wireless devices
+homepage = https://git.kernel.org/pub/scm/linux/kernel/git/jberg/iw.git/
+license = ISC
+epoch = 0
+release = 1
+build_style = make
+
+source =
+    https://www.kernel.org/pub/software/network/iw/iw-6.9.tar.xz    3f2db22ad41c675242b98ae3942dbf3112548c60a42ff739210f2de4e98e4894
+
+depends =
+    libnl
+
+makedepends =
+

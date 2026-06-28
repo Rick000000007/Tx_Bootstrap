@@ -1,0 +1,18 @@
+name = compiler-rt
+version = 19.1.7
+category = compilers
+description = Compiler runtime libraries for LLVM/Clang
+homepage = https://compiler-rt.llvm.org/
+license = Apache-2.0 WITH LLVM-exception
+epoch = 0
+release = 1
+build_style = cmake
+
+source =
+    https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/compiler-rt-19.1.7.src.tar.xz    c12b6e764202c615c1a3af9a13d477846878757ae0e29e5f8979215a6958fffc
+
+depends =
+
+
+makedepends =
+

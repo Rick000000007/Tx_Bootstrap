@@ -1,0 +1,18 @@
+name = libedit
+version = 20250104-3.1
+category = libraries
+description = BSD line editing library
+homepage = https://thrysoee.dk/editline/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://thrysoee.dk/editline/libedit-20250104-3.1.tar.gz    23792701694550a53720630cd1cd6167101b5773adddcb4104f7345b73a568ac
+
+depends =
+    ncurses
+
+makedepends =
+

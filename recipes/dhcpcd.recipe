@@ -1,0 +1,18 @@
+name = dhcpcd
+version = 10.1.0
+category = networking
+description = RFC2131 compliant DHCP client
+homepage = https://github.com/NetworkConfiguration/dhcpcd
+license = BSD-2-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.1.0/dhcpcd-10.1.0.tar.xz    abc307c63853da3199baa5c1e15fd5ede9d68d068b2a59ca14c5a6768e9cc3b7
+
+depends =
+    udev
+
+makedepends =
+

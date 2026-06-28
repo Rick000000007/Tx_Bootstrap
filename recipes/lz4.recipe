@@ -1,0 +1,20 @@
+name = lz4
+version = 1.10.0
+category = compression
+description = Extremely fast compression algorithm
+homepage = https://lz4.org/
+license = BSD-2-Clause AND GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = make
+make_args =
+    TARGET_ARCH=
+
+source =
+    https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz    537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b
+
+depends =
+
+
+makedepends =
+

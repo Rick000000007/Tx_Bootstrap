@@ -1,0 +1,18 @@
+name = spdlog
+version = 1.15.1
+category = libraries
+description = Fast C++ logging library
+homepage = https://github.com/gabime/spdlog
+license = MIT
+epoch = 0
+release = 1
+build_style = cmake
+
+source =
+    https://github.com/gabime/spdlog/archive/refs/tags/v1.15.1.tar.gz    25c843860f039a1600f232c6eb9e01e6627f7d030a2ae5e232bdd3c9205d26cc
+
+depends =
+    fmt
+
+makedepends =
+

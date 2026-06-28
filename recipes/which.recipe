@@ -1,0 +1,18 @@
+name = which
+version = 2.21
+category = devel
+description = Show the full path of shell commands
+homepage = https://savannah.gnu.org/projects/which/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/which/which-2.21.tar.gz    f4a245b94124b377d8b49646bf421f9155d36aa7614b6ebf83705d3ffc76eaad
+
+depends =
+
+
+makedepends =
+

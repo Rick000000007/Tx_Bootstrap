@@ -1,0 +1,18 @@
+name = e2fsprogs
+version = 1.47.2
+category = system
+description = Ext2/3/4 filesystem utilities
+homepage = https://e2fsprogs.org/
+license = GPL-2.0-or-later AND LGPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.2/e2fsprogs-1.47.2.tar.gz    7a959221c1b1cc6e28b7d7a4e204a2ffd8ec6d8a2de4461c482b64c5f4463cca
+
+depends =
+
+
+makedepends =
+

@@ -1,0 +1,20 @@
+name = openssh
+version = 9.9p1
+category = networking
+description = SSH protocol implementation for remote login and file transfer
+homepage = https://www.openssh.com/
+license = BSD-2-Clause AND ISC AND MIT
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.9p1.tar.gz    b343fbcdbff87f15b1986e6e15d6d4fc9a7d36066be6b7fb507087ba8f966c02
+
+depends =
+    openssl
+    zlib
+    libedit
+
+makedepends =
+

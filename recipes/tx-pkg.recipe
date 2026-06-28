@@ -1,0 +1,18 @@
+name = tx-pkg
+version = 1.0.0
+category = tx-system
+description = TX Package Manager
+homepage = https://tx.dev
+license = MIT
+epoch = 0
+release = 1
+build_style = meta
+
+source =
+
+
+depends =
+
+
+makedepends =
+

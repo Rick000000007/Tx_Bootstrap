@@ -1,0 +1,18 @@
+name = tx-base
+version = 1.0.0
+category = tx-system
+description = TX Base system configuration
+homepage = https://tx.dev
+license = MIT
+epoch = 0
+release = 1
+build_style = meta
+
+source =
+
+
+depends =
+
+
+makedepends =
+

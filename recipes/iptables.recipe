@@ -1,0 +1,19 @@
+name = iptables
+version = 1.8.11
+category = system
+description = Linux kernel packet control tool
+homepage = https://www.netfilter.org/projects/iptables/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.netfilter.org/projects/iptables/files/iptables-1.8.11.tar.xz    d87303d55ef8c92bcad4dd3f978b26d272013642b029425775f5bad1009fe7b2
+
+depends =
+    libnftnl
+    libmnl
+
+makedepends =
+

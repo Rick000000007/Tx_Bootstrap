@@ -1,0 +1,19 @@
+name = less
+version = 668
+category = devel
+description = Terminal pager program
+homepage = https://www.greenwoodsoftware.com/less/
+license = GPL-3.0-or-later OR BSD-2-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.greenwoodsoftware.com/less/less-668.tar.gz    2819f55564d86d542abbecafd82ff61e819a3eec967faa36cd3e68f1596a44b8
+
+depends =
+    ncurses
+    pcre2
+
+makedepends =
+

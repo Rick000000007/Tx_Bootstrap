@@ -1,0 +1,18 @@
+name = tree
+version = 2.2.1
+category = devel
+description = Directory listing program showing a tree structure
+homepage = https://oldmanprogrammer.net/source.php?dir=projects/tree
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = make
+
+source =
+    https://deb.debian.org/debian/pool/main/t/tree/tree_2.2.1.orig.tar.gz    68ac45dc78c0c311ada06200ffc3c285e74223ba208061f8d15ffac25e44b2ec
+
+depends =
+
+
+makedepends =
+

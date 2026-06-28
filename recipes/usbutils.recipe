@@ -1,0 +1,20 @@
+name = usbutils
+version = 017
+category = system
+description = USB device utilities
+homepage = https://github.com/gregkh/usbutils
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/gregkh/usbutils/archive/refs/tags/v017.tar.gz    7bb79a4c3fc664b700838add2444906919fd1d9bd767a733fc4b23975d2872b7
+
+depends =
+    libusb
+    systemd-libs
+    hwdata
+
+makedepends =
+

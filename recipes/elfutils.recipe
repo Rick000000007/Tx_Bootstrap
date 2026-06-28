@@ -1,0 +1,23 @@
+name = elfutils
+version = 0.192
+category = devel
+description = Collection of utilities for handling ELF objects
+homepage = https://sourceware.org/elfutils/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://sourceware.org/elfutils/ftp/0.192/elfutils-0.192.tar.bz2    616099beae24aba11f9b63d86ca6cc8d566d968b802391334c91df54eab416b4
+
+depends =
+    zlib
+    bzip2
+    xz
+    zstd
+    libarchive
+    curl
+
+makedepends =
+

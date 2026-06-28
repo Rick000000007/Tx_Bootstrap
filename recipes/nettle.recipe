@@ -1,0 +1,18 @@
+name = nettle
+version = 3.10.1
+category = networking
+description = Low-level cryptographic library
+homepage = https://www.lysator.liu.se/~nisse/nettle/
+license = GPL-2.0-or-later OR LGPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/nettle/nettle-3.10.1.tar.gz    b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132
+
+depends =
+    gmp
+
+makedepends =
+

@@ -1,0 +1,19 @@
+name = pcre2
+version = 10.45
+category = libraries
+description = Perl Compatible Regular Expressions
+homepage = https://www.pcre.org/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = cmake
+
+source =
+    https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.bz2    21547f3516120c75597e5b30a992e27a592a31950b5140e7b8bfde3f192033c4
+
+depends =
+    zlib
+    bzip2
+
+makedepends =
+

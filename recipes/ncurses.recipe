@@ -1,0 +1,18 @@
+name = ncurses
+version = 6.5
+category = libraries
+description = Library for text-based user interfaces
+homepage = https://invisible-island.net/ncurses/
+license = MIT
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://invisible-island.net/archives/ncurses/ncurses-6.5.tar.gz    136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
+
+depends =
+
+
+makedepends =
+

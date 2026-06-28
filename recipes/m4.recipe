@@ -1,0 +1,20 @@
+name = m4
+version = 1.4.19
+category = build-tools
+description = GNU M4 - macro processor
+homepage = https://www.gnu.org/software/m4/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/m4/m4-1.4.19.tar.xz    63aede5c6d33b6d9b13511cd0be2cac046f2e70fd0a07aa9573a04a82783af96
+
+env_vars =
+    CFLAGS=-U_FORTIFY_SOURCE
+
+depends =
+
+
+makedepends =

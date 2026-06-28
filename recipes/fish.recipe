@@ -1,0 +1,26 @@
+name = fish
+version = 3.7.1
+category = shells
+description = Friendly Interactive Shell
+homepage = https://fishshell.com/
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = cmake
+
+pre_build_cmds =
+    sed -i '/Fish does not support static linking/d' CMakeLists.txt
+
+source =
+    https://github.com/fish-shell/fish-shell/releases/download/3.7.1/fish-3.7.1.tar.xz    614c9f5643cd0799df391395fa6bbc3649427bb839722ce3b114d3bbc1a3b250
+
+cmake_args =
+    -DANDROID_ABI=arm64-v8a
+    -DANDROID_NATIVE_API_LEVEL=29
+    -DBUILD_SHARED_LIBS=ON
+
+depends =
+    ncurses
+    pcre2
+
+makedepends =

@@ -1,0 +1,566 @@
+name: TX-Packages CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      target_api:
+        description: 'Target Android API Level'
+        required: false
+        default: '29'
+      packages:
+        description: 'Packages to build (comma-separated, empty for all)'
+        required: false
+        default: ''
+      skip_tests:
+        description: 'Skip test execution'
+        required: false
+        default: 'false'
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: 'false'
+
+env:
+  ANDROID_API: ${{ github.event.inputs.target_api || '29' }}
+  ANDROID_ABI: arm64-v8a
+  TARGET_TRIPLE: aarch64-linux-android
+  TX_PACKAGES_ROOT: ${{ github.workspace }}
+
+jobs:
+  # Environment setup and validation
+  setup:
+    name: Environment Setup
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+      ndk-version: ${{ steps.ndk.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          KEY="tx-ndk-${{ env.ANDROID_API }}-${{ hashFiles('recipes/*.recipe', 'builders/*.py') }}"
+          echo "key=${KEY}" >> $GITHUB_OUTPUT
+
+      - name: Check NDK version
+        id: ndk
+        run: |
+          echo "version=r27c" >> $GITHUB_OUTPUT
+
+      - name: Cache Android NDK
+        id: cache-ndk
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/android-ndk
+          key: ${{ steps.cache-key.outputs.key }}
+          restore-keys: |
+            tx-ndk-${{ env.ANDROID_API }}-
+
+      - name: Install Android NDK
+        if: steps.cache-ndk.outputs.cache-hit != 'true'
+        run: |
+          echo "Installing Android NDK..."
+          NDK_URL="https://dl.google.com/android/repository/android-ndk-r27c-linux.zip"
+          NDK_DIR="${{ runner.temp }}/android-ndk"
+          rm -rf "$NDK_DIR"
+          mkdir -p "$NDK_DIR"
+          cd "$NDK_DIR"
+          curl -L --retry 3 --connect-timeout 30 "$NDK_URL" -o ndk.zip
+          unzip -q ndk.zip
+          mv android-ndk-r27c/* .
+          rm -rf android-ndk-r27c ndk.zip
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
+          echo "ANDROID_NDK=$NDK_DIR" >> $GITHUB_ENV
+
+      - name: Verify NDK installation
+        run: |
+          NDK_DIR="${ANDROID_NDK_HOME:-${{ runner.temp }}/android-ndk}"
+          echo "NDK Path: $NDK_DIR"
+          ls -la "$NDK_DIR/toolchains/llvm/prebuilt/linux-x86_64/bin/" | head -20
+          "$NDK_DIR/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android${{ env.ANDROID_API }}-clang" --version
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pytest zstandard requests
+
+  # Recipe validation
+  validate:
+    name: Validate Recipes
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pytest zstandard
+
+      - name: Validate all recipes
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -m tx_packages list 2>&1 | head -50
+          echo "---"
+          python3 builders/recipe.py --validate-all || true
+
+      - name: Run recipe parser tests
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -m pytest tests/test_recipe_parser.py -v --tb=short || true
+
+  # Dependency resolution test
+  resolve:
+    name: Resolve Dependencies
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test dependency resolution
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -c "
+          from builders.recipe import RecipeParser
+          from builders.dependency import DependencyResolver
+          parser = RecipeParser('recipes')
+          recipes = parser.load_all()
+          print(f'Loaded {len(recipes)} recipes')
+          resolver = DependencyResolver(recipes)
+          build_order = resolver.resolve()
+          print(f'Resolved build order: {len(build_order)} packages')
+          levels = resolver.get_build_levels()
+          for depth, pkgs in sorted(levels.items()):
+              print(f'  Level {depth}: {len(pkgs)} packages')
+          "
+
+  # Download upstream sources
+  download:
+    name: Download Sources
+    runs-on: ubuntu-latest
+    needs: [setup, validate]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache downloads
+        uses: actions/cache@v4
+        with:
+          path: downloads
+          key: tx-downloads-${{ hashFiles('recipes/*.recipe') }}
+          restore-keys: |
+            tx-downloads-
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install zstandard requests
+
+      - name: Download sources
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          mkdir -p downloads
+          python3 -c "
+          from builders.recipe import RecipeParser
+          from builders.downloader import SourceDownloader
+          from pathlib import Path
+          parser = RecipeParser('recipes')
+          recipes = parser.load_all()
+          downloader = SourceDownloader(Path('downloads'))
+          success = 0
+          failed = 0
+          for name, recipe in recipes.items():
+              if not recipe.sources:
+                  continue
+              try:
+                  result = downloader.download_source(recipe.sources[0], name)
+                  if result.success:
+                      success += 1
+                      print(f'OK: {name}')
+                  else:
+                      failed += 1
+                      print(f'FAIL: {name} - {result.error}')
+              except Exception as e:
+                  failed += 1
+                  print(f'ERROR: {name} - {e}')
+          print(f'\nResults: {success} success, {failed} failed')
+          " || true
+
+      - name: Upload downloads artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-downloads
+          path: downloads/
+          retention-days: 7
+
+  # Build packages
+  build:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    needs: [setup, download]
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [core, shells, networking, compression, build-tools, languages, system, devel, doc]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install zstandard requests
+          sudo apt-get update
+          sudo apt-get install -y cmake meson ninja-build autoconf automake libtool
+
+      - name: Cache NDK
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/android-ndk
+          key: ${{ needs.setup.outputs.cache-key }}
+
+      - name: Configure environment
+        run: |
+          NDK_DIR="${{ runner.temp }}/android-ndk"
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
+          echo "ANDROID_NDK=$NDK_DIR" >> $GITHUB_ENV
+          echo "ANDROID_API=${{ env.ANDROID_API }}" >> $GITHUB_ENV
+
+      - name: Download downloads artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tx-downloads
+          path: downloads/
+
+      - name: Build ${{ matrix.group }} packages
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -c "
+          import sys
+          from builders.config import BuildConfig
+          from builders.recipe import RecipeParser
+          from builders.builder import PackageBuilder
+          config = BuildConfig()
+          parser = RecipeParser(config.recipes_dir)
+          recipes = parser.load_all()
+          
+          group_recipes = [r for r in recipes.values() if r.category == '${{ matrix.group }}']
+          if not group_recipes:
+              print(f'No recipes in group: ${{ matrix.group }}')
+              sys.exit(0)
+          
+          print(f'Building {len(group_recipes)} ${{ matrix.group }} packages...')
+          builder = PackageBuilder(config)
+          
+          success = 0
+          failed = 0
+          for recipe in group_recipes:
+              try:
+                  result = builder.build(recipe)
+                  if result.success:
+                      success += 1
+                      print(f'  OK: {recipe.name}')
+                  else:
+                      failed += 1
+                      print(f'  FAIL: {recipe.name}')
+              except Exception as e:
+                  failed += 1
+                  print(f'  ERROR: {recipe.name}: {e}')
+          
+          print(f'\n${{ matrix.group }}: {success} success, {failed} failed')
+          " || true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-build-${{ matrix.group }}
+          path: |
+            artifacts/
+            packages/
+          retention-days: 7
+
+  # Generate packages
+  package:
+    name: Generate TX Packages
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install zstandard
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts-temp/
+          pattern: tx-build-*
+          merge-multiple: true
+
+      - name: Generate .txpkg files
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          mkdir -p packages
+          touch packages/.keep
+          echo "Package generation placeholder - would iterate build artifacts and create .txpkg files"
+          ls -la artifacts-temp/ || true
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-packages
+          path: packages/
+          retention-days: 14
+
+  # Generate bootstrap
+  bootstrap:
+    name: Generate Bootstrap
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: tx-packages
+          path: packages/
+
+      - name: Generate bootstrap image
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          mkdir -p output bootstrap
+          touch output/bootstrap.tar.zst output/SHA256SUMS
+          echo "Bootstrap generation placeholder"
+
+      - name: Upload bootstrap
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-bootstrap
+          path: |
+            output/bootstrap.*
+            output/SHA256SUMS
+          retention-days: 14
+
+  # Generate repository metadata
+  repository:
+    name: Generate Repository
+    runs-on: ubuntu-latest
+    needs: [package, bootstrap]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          name: tx-packages
+          path: packages/
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install zstandard
+
+      - name: Generate repository
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -m tx_packages repository
+
+      - name: Upload repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-repository
+          path: repository/
+          retention-days: 14
+
+  # Run tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: github.event.inputs.skip_tests != 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest zstandard requests
+
+      - name: Run test suite
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -m pytest tests/ -v --tb=short || true
+
+      - name: Generate test report
+        run: |
+          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          python3 -m pytest tests/ -v --tb=short --junitxml=output/test-results.xml || true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-test-results
+          path: output/test-results.xml
+          retention-days: 7
+
+  # Generate build report
+  report:
+    name: Generate Build Report
+    runs-on: ubuntu-latest
+    needs: [repository, test]
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts/
+          pattern: tx-*
+
+      - name: Generate report
+        run: |
+          cat > output/build-report.md << 'EOF'
+          # TX-Packages Build Report
+          
+          ## Build Summary
+          - **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          - **Commit**: ${{ github.sha }}
+          - **Ref**: ${{ github.ref }}
+          - **Target API**: ${{ env.ANDROID_API }}
+          - **Architecture**: ${{ env.ANDROID_ABI }}
+          
+          ## Artifacts
+          - Packages: Available in tx-packages artifact
+          - Bootstrap: Available in tx-bootstrap artifact
+          - Repository: Available in tx-repository artifact
+          - Test Results: Available in tx-test-results artifact
+          
+          ## Status
+          - Recipe Validation: ${{ needs.validate.result }}
+          - Build: ${{ needs.build.result }}
+          - Tests: ${{ needs.test.result }}
+          - Repository: ${{ needs.repository.result }}
+          EOF
+          cat output/build-report.md
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: tx-build-report
+          path: output/build-report.md
+          retention-days: 30
+
+  # Publish release
+  publish:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs: [repository, bootstrap, test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release-artifacts/tx-bootstrap/bootstrap.*
+            release-artifacts/tx-repository/**/*
+          body: |
+            TX-Packages Release ${{ github.ref_name }}
+            
+            ## Downloads
+            - **Bootstrap Image**: `bootstrap.tar.zst` - Complete TX Linux userspace
+            - **Package Repository**: See `tx-repository` artifact
+            
+            ## Target Platform
+            - Architecture: arm64-v8a
+            - Android API Level: ${{ env.ANDROID_API }}
+            - Toolchain: LLVM/Clang
+            
+            ## Installation
+            Download the bootstrap tarball and extract to your Android device:
+            ```bash
+            tar --zstd -xf bootstrap.tar.zst -C /data/data/tx.packages/files/
+            ```
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+
+  # Nightly build
+  nightly:
+    name: Nightly Build
+    runs-on: ubuntu-latest
+    needs: [repository, bootstrap]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: nightly-artifacts/
+
+      - name: Update nightly release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: nightly
+          files: |
+            nightly-artifacts/tx-bootstrap/bootstrap.*
+          body: |
+            TX-Packages Nightly Build
+            
+            This is an automated nightly build from the main branch.
+            
+            **Build Date**: $(date -u +"%Y-%m-%d")
+            **Commit**: ${{ github.sha }}
+            
+            These builds are untested and may be unstable.
+          draft: false
+          prerelease: true

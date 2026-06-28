@@ -1,0 +1,18 @@
+name = libevent
+version = 2.1.12
+category = libraries
+description = Event-driven networking library
+homepage = https://libevent.org/
+license = BSD-3-Clause
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz    92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb
+
+depends =
+    openssl
+
+makedepends =
+

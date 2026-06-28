@@ -1,0 +1,21 @@
+name = libnl
+version = 3.11.0
+category = networking
+description = Netlink Protocol Library Suite
+homepage = https://www.infradead.org/~tgr/libnl/
+license = LGPL-2.1-only
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/thom311/libnl/releases/download/libnl3_11_0/libnl-3.11.0.tar.gz    2a56e1edefa3e68a7c00879496736fdbf62fc94ed3232c0baba127ecfa76874d
+
+env_vars =
+    ac_cv_lib_pthread_pthread_mutex_lock=yes
+    CFLAGS=-Din_addr_t=uint32_t
+
+depends =
+
+
+makedepends =

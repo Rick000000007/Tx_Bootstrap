@@ -1,0 +1,19 @@
+name = wireless_tools
+version = 30.pre9
+category = networking
+description = Wireless Tools for Linux
+homepage = https://hewlettpackard.github.io/wireless-tools/Tools.html
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = make
+extract_dir = wireless_tools.30
+
+source =
+    https://hewlettpackard.github.io/wireless-tools/wireless_tools.30.pre9.tar.gz    abd9c5c98abf1fdd11892ac2f8a56737544fe101e1be27c6241a564948f34c63
+
+depends =
+
+
+makedepends =
+

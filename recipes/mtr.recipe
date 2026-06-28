@@ -1,0 +1,22 @@
+name = mtr
+version = 0.95
+category = networking
+description = Network diagnostic tool combining ping and traceroute
+homepage = https://www.bitwizard.nl/mtr/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://github.com/traviscross/mtr/archive/refs/tags/v0.95.tar.gz    12490fb660ba5fb34df8c06a0f62b4f9cbd11a584fc3f6eceda0a99124e8596f
+
+env_vars =
+    CFLAGS=-Dindex=strchr
+
+depends =
+    ncurses
+    jansson
+
+makedepends =
+

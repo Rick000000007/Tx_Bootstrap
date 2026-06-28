@@ -1,0 +1,19 @@
+name = socat
+version = 1.8.0.1
+category = networking
+description = Multipurpose relay for bidirectional data transfer
+homepage = http://www.dest-unreach.org/socat/
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    http://www.dest-unreach.org/socat/download/socat-1.8.0.1.tar.gz    dc350411e03da657269e529c4d49fe23ba7b4610b0b225c020df4cf9b46e6982
+
+depends =
+    openssl
+    readline
+
+makedepends =
+

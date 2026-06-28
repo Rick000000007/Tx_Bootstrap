@@ -1,0 +1,31 @@
+{
+  "target_arch": "aarch64",
+  "target_triple": "aarch64-linux-android",
+  "target_abi": "arm64-v8a",
+  "min_api_level": 29,
+  "android_version": "10",
+  "parallel_jobs": 4,
+  "incremental": true,
+  "use_ccache": true,
+  "strip_binaries": true,
+  "optimize": "O2",
+  "debug": false,
+  "verbose": false,
+  "pkg_compression": "zst",
+  "pkg_compression_level": 19,
+  "sign_packages": false,
+  "maintainer": "TX-Packages <packages@tx.dev>",
+  "repo_name": "TX-Packages",
+  "repo_codename": "tx-main",
+  "repo_description": "TX Linux Userspace for Android",
+  "repo_components": [
+    "main"
+  ],
+  "upstream_mirrors": [
+    "https://ftp.gnu.org/gnu",
+    "https://kernel.org/pub",
+    "https://ftp.openssl.org/source",
+    "https://www.python.org/ftp",
+    "https://github.com"
+  ]
+}

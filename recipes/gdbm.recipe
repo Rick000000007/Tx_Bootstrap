@@ -1,0 +1,18 @@
+name = gdbm
+version = 1.25
+category = devel
+description = GNU database manager
+homepage = https://www.gnu.org/software/gdbm/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/gdbm/gdbm-1.25.tar.gz    d02db3c5926ed877f8817b81cd1f92f53ef74ca8c6db543fbba0271b34f393ec
+
+depends =
+
+
+makedepends =
+

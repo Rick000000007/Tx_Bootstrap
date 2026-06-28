@@ -1,0 +1,24 @@
+name = conntrack-tools
+version = 1.4.8
+category = networking
+description = Userspace tools to interact with connection tracking system
+homepage = https://conntrack-tools.netfilter.org/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.8.tar.xz    067677f4c5f6564819e78ed3a9d4a8980935ea9273f3abb22a420ea30ab5ded6
+
+depends =
+    libnetfilter_conntrack
+    libnetfilter_cttimeout
+    libnetfilter_cthelper
+    libnetfilter_queue
+    libmnl
+    libnfnetlink
+    libtirpc
+
+makedepends =
+

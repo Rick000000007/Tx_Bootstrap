@@ -1,0 +1,18 @@
+name = mandoc
+version = 1.14.6
+category = doc
+description = UNIX manpage compiler toolset
+homepage = https://mandoc.bsd.lv/
+license = ISC
+epoch = 0
+release = 1
+build_style = make
+
+source =
+    https://mandoc.bsd.lv/snapshots/mandoc-1.14.6.tar.gz    8bf0d570f01e70a6e124884088870cbed7537f36328d512909eb10cd53179d9c
+
+depends =
+
+
+makedepends =
+

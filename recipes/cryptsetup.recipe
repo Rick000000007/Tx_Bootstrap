@@ -1,0 +1,23 @@
+name = cryptsetup
+version = 2.7.5
+category = system
+description = Userspace setup tool for transparent encryption of block devices
+homepage = https://gitlab.com/cryptsetup/cryptsetup
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/cryptsetup-2.7.5.tar.xz    d2be4395b8f503b0ebf4b2d81db90c35a97050a358ee21fe62a0dfb66e5d5522
+
+depends =
+    openssl
+    json-c
+    argon2
+    lvm2
+    popt
+    util-linux
+
+makedepends =
+

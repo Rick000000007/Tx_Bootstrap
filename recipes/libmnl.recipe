@@ -1,0 +1,18 @@
+name = libmnl
+version = 1.0.5
+category = networking
+description = Netlink library for minimalistic userspace applications
+homepage = https://www.netfilter.org/projects/libmnl/
+license = LGPL-2.1-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.netfilter.org/projects/libmnl/files/libmnl-1.0.5.tar.bz2    274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525
+
+depends =
+
+
+makedepends =
+

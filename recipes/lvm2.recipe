@@ -1,0 +1,20 @@
+name = lvm2
+version = 2.03.29
+category = system
+description = Logical Volume Manager 2 utilities
+homepage = https://sourceware.org/lvm2/
+license = GPL-2.0-or-later AND LGPL-2.1-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://sourceware.org/pub/lvm2/LVM2.2.03.29.tgz    30c53776cb4ddf6bf9eca29d0c28dbf9c5ac170c09154321213b11c3dbb5be9c
+
+depends =
+    libaio
+    readline
+    systemd-libs
+
+makedepends =
+

@@ -1,0 +1,18 @@
+name = binutils
+version = 2.43.1
+category = compilers
+description = GNU binary utilities
+homepage = https://www.gnu.org/software/binutils/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/binutils/binutils-2.43.1.tar.xz    13f74202a3c4c51118b797a39ea4200d3f6cfbe224da6d1d95bb938480132dfd
+
+depends =
+
+
+makedepends =
+

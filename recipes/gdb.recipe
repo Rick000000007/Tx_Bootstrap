@@ -1,0 +1,22 @@
+name = gdb
+version = 16.2
+category = devel
+description = GNU Project Debugger
+homepage = https://www.gnu.org/software/gdb/
+license = GPL-3.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/gdb/gdb-16.2.tar.xz    4002cb7f23f45c37c790536a13a720942ce4be0402d929c9085e92f10d480119
+
+depends =
+    ncurses
+    expat
+    zlib
+    xz
+    python
+
+makedepends =
+

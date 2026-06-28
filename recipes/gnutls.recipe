@@ -1,0 +1,22 @@
+name = gnutls
+version = 3.8.4
+category = networking
+description = GNU TLS library
+homepage = https://www.gnutls.org/
+license = LGPL-2.1-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.4.tar.xz    2bea4e154794f3f00180fa2a5c51fe8b005ac7a31cd58bd44cdfa7f36ebc3a9b
+
+depends =
+    nettle
+    gmp
+    libtasn1
+    p11-kit
+    zlib
+
+makedepends =
+

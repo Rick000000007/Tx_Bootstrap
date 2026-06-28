@@ -1,0 +1,21 @@
+name = kmod
+version = 33
+category = system
+description = Linux kernel module management utilities
+homepage = https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-33.tar.xz    dc768b3155172091f56dc69430b5481f2d76ecd9ccb54ead8c2540dbcf5ea9bc
+
+depends =
+    zlib
+    xz
+    zstd
+    openssl
+
+makedepends =
+

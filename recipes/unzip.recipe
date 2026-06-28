@@ -1,0 +1,19 @@
+name = unzip
+version = 6.0
+category = core-utils
+description = Info-ZIP extraction utility
+homepage = https://infozip.org/
+license = Info-ZIP
+epoch = 0
+release = 1
+build_style =
+extract_dir = unzip60 make
+
+source =
+    http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0.orig.tar.gz    036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
+
+depends =
+
+
+makedepends =
+

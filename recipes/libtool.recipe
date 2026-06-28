@@ -1,0 +1,18 @@
+name = libtool
+version = 2.5.4
+category = build-tools
+description = GNU Libtool - generic library support script
+homepage = https://www.gnu.org/software/libtool/
+license = GPL-2.0-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/libtool/libtool-2.5.4.tar.xz    f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675
+
+depends =
+
+
+makedepends =
+

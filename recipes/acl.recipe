@@ -1,0 +1,18 @@
+name = acl
+version = 2.3.2
+category = system
+description = Access control list utilities
+homepage = https://savannah.nongnu.org/projects/acl
+license = LGPL-2.1-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://download-mirror.savannah.gnu.org/releases/acl/acl-2.3.2.tar.xz    97203a72cae99ab89a067fe2210c1cbf052bc492b479eca7d226d9830883b0bd
+
+depends =
+    attr
+
+makedepends =
+

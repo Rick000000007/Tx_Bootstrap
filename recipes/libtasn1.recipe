@@ -1,0 +1,18 @@
+name = libtasn1
+version = 4.19.0
+category = networking
+description = ASN.1 library
+homepage = https://www.gnu.org/software/libtasn1/
+license = LGPL-2.1-or-later
+epoch = 0
+release = 1
+build_style = gnu
+
+source =
+    https://mirrors.kernel.org/gnu/libtasn1/libtasn1-4.19.0.tar.gz    1613f0ac1cf484d6ec0ce3b8c06d56263cc7242f1c23b30d82d23de345a63f7a
+
+depends =
+
+
+makedepends =
+
