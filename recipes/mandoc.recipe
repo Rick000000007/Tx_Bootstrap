@@ -6,13 +6,17 @@ homepage = https://mandoc.bsd.lv/
 license = ISC
 epoch = 0
 release = 1
-build_style = make
+build_style = custom
 
 source =
     https://mandoc.bsd.lv/snapshots/mandoc-1.14.6.tar.gz    8bf0d570f01e70a6e124884088870cbed7537f36328d512909eb10cd53179d9c
 
+pre_build_cmds =
+    ./configure PREFIX=/data/data/tx.packages/files/usr
+
+post_install_cmds =
+    make install DESTDIR="$DESTDIR/mandoc"
+
 depends =
 
-
 makedepends =
-

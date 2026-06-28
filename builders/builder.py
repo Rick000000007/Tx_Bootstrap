@@ -46,6 +46,13 @@ class PackageBuilder:
         self.downloader = SourceDownloader(config.downloads_dir)
         self._build_callbacks: List[Callable[[str, str, bool], None]] = []
 
+        # Create dummy libpthread.a in shared sysroot so packages linking against -lpthread succeed on Android
+        lib_dir = self.config.artifacts_dir / "data" / "data" / "tx.packages" / "files" / "usr" / "lib"
+        lib_dir.mkdir(parents=True, exist_ok=True)
+        libpthread_a = lib_dir / "libpthread.a"
+        if not libpthread_a.exists():
+            libpthread_a.write_bytes(b"!<arch>\n")
+
     def register_callback(self, callback: Callable[[str, str, bool], None]) -> None:
         """Register a build progress callback.
 
