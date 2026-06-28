@@ -259,46 +259,7 @@ jobs:
       - name: Build all packages sequentially
         run: |
           export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
-          python3 -c "
-          import sys
-          from builders.config import BuildConfig
-          from builders.recipe import RecipeParser
-          from builders.builder import PackageBuilder
-          from builders.dependency import DependencyResolver
-          config = BuildConfig()
-          parser = RecipeParser(config.recipes_dir)
-          recipes = parser.load_all()
-          
-          resolver = DependencyResolver(recipes)
-          try:
-              build_order = resolver.resolve()
-          except Exception as e:
-              print(f'Dependency resolution failed: {e}')
-              sys.exit(1)
-              
-          print(f'Building {len(build_order)} packages sequentially in dependency order...')
-          builder = PackageBuilder(config)
-          
-          success = 0
-          failed = 0
-          for pkg_name in build_order:
-              recipe = recipes[pkg_name]
-              try:
-                  result = builder.build(recipe)
-                  if result.success:
-                      success += 1
-                      print(f'  OK: {recipe.name}')
-                  else:
-                      failed += 1
-                      print(f'  FAIL: {recipe.name}')
-              except Exception as e:
-                  failed += 1
-                  print(f'  ERROR: {recipe.name}: {e}')
-          
-          print(f'\nTotal Build Results: {success} success, {failed} failed')
-          if failed > 0:
-              sys.exit(1)
-          "
+          python3 -m tx_packages build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -336,9 +297,11 @@ jobs:
         run: |
           export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
           mkdir -p packages
+          if [ -d "artifacts-temp/packages" ]; then
+            cp -r artifacts-temp/packages/* packages/
+          fi
           touch packages/.keep
-          echo "Package generation placeholder - would iterate build artifacts and create .txpkg files"
-          ls -la artifacts-temp/ || true
+          ls -la packages/
 
       - name: Upload packages
         uses: actions/upload-artifact@v4
@@ -365,9 +328,7 @@ jobs:
       - name: Generate bootstrap image
         run: |
           export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
-          mkdir -p output bootstrap
-          touch output/bootstrap.tar.zst output/SHA256SUMS
-          echo "Bootstrap generation placeholder"
+          python3 -m tx_packages bootstrap
 
       - name: Upload bootstrap
         uses: actions/upload-artifact@v4
@@ -410,7 +371,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tx-repository
-          path: repository/
+          path: |
+            repository/
+            repository-root/
           retention-days: 14
 
   # Run tests

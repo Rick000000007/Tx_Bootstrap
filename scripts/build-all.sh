@@ -229,10 +229,16 @@ config = BuildConfig()
 parser = RecipeParser(config.recipes_dir)
 recipes = parser.load_all()
 
+# Separate recipes into standard and root
+standard_recipes = [r for r in recipes.values() if r.name not in config.root_packages]
+root_recipes = [r for r in recipes.values() if r.name in config.root_packages]
+
 generator = BootstrapGenerator(config)
 try:
-    path = generator.generate(list(recipes.values()), config.packages_dir)
-    print(f'Bootstrap: {path}')
+    path_std = generator.generate(standard_recipes, config.packages_dir, 'bootstrap')
+    print(f'Standard Bootstrap: {path_std}')
+    path_root = generator.generate(root_recipes, config.packages_dir, 'bootstrap-root')
+    print(f'Root Bootstrap: {path_root}')
 except Exception as e:
     print(f'WARNING: Bootstrap generation failed: {e}')
     print('This is expected if package builds failed.')

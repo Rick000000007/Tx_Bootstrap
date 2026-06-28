@@ -128,18 +128,23 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
         return 1
 
     # Determine packages for bootstrap
-    if args.packages:
-        target_packages = args.packages.split(',')
-        bootstrap_recipes = [recipes[p] for p in target_packages if p in recipes]
-    else:
-        # Use all recipes
-        bootstrap_recipes = list(recipes.values())
-
-    # Generate bootstrap
     generator = BootstrapGenerator(config)
     try:
-        bootstrap_path = generator.generate(bootstrap_recipes, config.packages_dir)
-        logger.info(f"Bootstrap generated: {bootstrap_path}")
+        if args.packages:
+            target_packages = args.packages.split(',')
+            bootstrap_recipes = [recipes[p] for p in target_packages if p in recipes]
+            bootstrap_path = generator.generate(bootstrap_recipes, config.packages_dir, "bootstrap")
+            logger.info(f"Bootstrap generated: {bootstrap_path}")
+        else:
+            # Generate both standard and root bootstraps
+            standard_recipes = [r for r in recipes.values() if r.name not in config.root_packages]
+            root_recipes = [r for r in recipes.values() if r.name in config.root_packages]
+
+            path_std = generator.generate(standard_recipes, config.packages_dir, "bootstrap")
+            logger.info(f"Standard Bootstrap generated: {path_std}")
+
+            path_root = generator.generate(root_recipes, config.packages_dir, "bootstrap-root")
+            logger.info(f"Root Bootstrap generated: {path_root}")
     except Exception as e:
         logger.error(f"Bootstrap generation failed: {e}")
         return 1
@@ -159,8 +164,21 @@ def cmd_repository(args: argparse.Namespace) -> int:
 
     generator = RepositoryGenerator(config)
     try:
-        repo_dir = generator.generate(list(recipes.values()))
-        logger.info(f"Repository generated: {repo_dir}")
+        if args.output:
+            repo_dir = generator.generate(list(recipes.values()), Path(args.output))
+            logger.info(f"Repository generated: {repo_dir}")
+        else:
+            # Generate separate main and root repositories
+            standard_recipes = [r for r in recipes.values() if r.name not in config.root_packages]
+            root_recipes = [r for r in recipes.values() if r.name in config.root_packages]
+
+            # Main repository
+            repo_std = generator.generate(standard_recipes, config.repository_dir)
+            logger.info(f"Standard Repository generated: {repo_std}")
+
+            # Root repository
+            repo_root = generator.generate(root_recipes, config.repository_dir.parent / "repository-root")
+            logger.info(f"Root Repository generated: {repo_root}")
     except Exception as e:
         logger.error(f"Repository generation failed: {e}")
         return 1

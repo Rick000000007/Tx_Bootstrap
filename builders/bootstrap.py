@@ -56,18 +56,19 @@ class BootstrapGenerator:
         self.rootfs_dir = self.bootstrap_dir / "rootfs"
         self.output_dir = config.output_dir
 
-    def generate(self, recipes: List[Recipe], packages_dir: Path) -> Path:
+    def generate(self, recipes: List[Recipe], packages_dir: Path, name: str = "bootstrap") -> Path:
         """
         Generate the bootstrap tarball.
 
         Args:
             recipes: List of recipes to include in bootstrap
             packages_dir: Directory containing .txpkg files
+            name: Name of the generated bootstrap archive
 
         Returns:
             Path to the generated bootstrap tarball
         """
-        logger.info(f"Generating bootstrap with {len(recipes)} packages")
+        logger.info(f"Generating bootstrap {name} with {len(recipes)} packages")
 
         # Clean and create rootfs directory
         if self.rootfs_dir.exists():
@@ -100,12 +101,12 @@ class BootstrapGenerator:
         self._validate_userspace(prefix, installed_packages)
 
         # Generate manifest
-        manifest = self._generate_manifest(recipes, prefix)
+        manifest = self._generate_manifest(recipes, prefix, name)
 
         # Create bootstrap archive
-        bootstrap_path = self._create_archive(prefix, manifest)
+        bootstrap_path = self._create_archive(prefix, manifest, name)
 
-        logger.info(f"Bootstrap generated: {bootstrap_path}")
+        logger.info(f"Bootstrap {name} generated: {bootstrap_path}")
         return bootstrap_path
 
     def _install_package(self, recipe: Recipe, packages_dir: Path, prefix: Path) -> None:
@@ -264,9 +265,10 @@ set bell-style none
         if total_size < 1024:  # Less than 1KB is suspicious
             raise BootstrapError("Userspace appears empty or incomplete")
 
-    def _generate_manifest(self, recipes: List[Recipe], prefix: Path) -> BootstrapManifest:
+    def _generate_manifest(self, recipes: List[Recipe], prefix: Path, name: str) -> BootstrapManifest:
         """Generate the bootstrap manifest."""
         manifest = BootstrapManifest(
+            name=name,
             architecture=self.config.target_arch,
             api_level=self.config.min_api_level,
             packages=[r.name for r in recipes],
@@ -296,13 +298,13 @@ set bell-style none
 
         return manifest
 
-    def _create_archive(self, prefix: Path, manifest: BootstrapManifest) -> Path:
+    def _create_archive(self, prefix: Path, manifest: BootstrapManifest, name: str = "bootstrap") -> Path:
         """Create the bootstrap archive."""
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # Paths
-        bootstrap_tar = self.output_dir / "bootstrap.tar.zst"
-        bootstrap_json = self.output_dir / "bootstrap.json"
+        bootstrap_tar = self.output_dir / f"{name}.tar.zst"
+        bootstrap_json = self.output_dir / f"{name}.json"
         sha256_file = self.output_dir / "SHA256SUMS"
 
         # Write manifest JSON
@@ -310,7 +312,7 @@ set bell-style none
         logger.info(f"Manifest written: {bootstrap_json}")
 
         # Create tar.zst archive
-        logger.info("Creating bootstrap.tar.zst...")
+        logger.info(f"Creating {name}.tar.zst...")
         try:
             import zstandard as zstd
             cctx = zstd.ZstdCompressor(level=19)
@@ -334,7 +336,7 @@ set bell-style none
         except ImportError:
             # Fallback to tar.gz
             logger.warning("zstandard not available, using gzip compression")
-            bootstrap_tar = self.output_dir / "bootstrap.tar.gz"
+            bootstrap_tar = self.output_dir / f"{name}.tar.gz"
             with tarfile.open(bootstrap_tar, 'w:gz', compresslevel=9) as tf:
                 tf.add(bootstrap_json, arcname="bootstrap.json")
                 for item in prefix.rglob("*"):
@@ -345,9 +347,21 @@ set bell-style none
         # Calculate SHA-256
         sha256 = hashlib.sha256(bootstrap_tar.read_bytes()).hexdigest()
 
-        # Write SHA256SUMS
-        sha256sums_content = f"{sha256}  {bootstrap_tar.name}\n"
-        sha256sums_content += f"{hashlib.sha256(bootstrap_json.read_bytes()).hexdigest()}  {bootstrap_json.name}\n"
+        # Read existing checksums
+        checksums = {}
+        if sha256_file.exists():
+            for line in sha256_file.read_text().splitlines():
+                if line.strip():
+                    parts = line.strip().split(None, 1)
+                    if len(parts) == 2:
+                        checksums[parts[1]] = parts[0]
+
+        # Add/update new checksums
+        checksums[bootstrap_tar.name] = sha256
+        checksums[bootstrap_json.name] = hashlib.sha256(bootstrap_json.read_bytes()).hexdigest()
+
+        # Write all back
+        sha256sums_content = "".join(f"{chsum}  {filename}\n" for filename, chsum in sorted(checksums.items()))
         sha256_file.write_text(sha256sums_content)
 
         logger.info(f"SHA256: {sha256}")

@@ -12,7 +12,7 @@ import platform
 import subprocess
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Set
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +133,11 @@ class BuildConfig:
     repo_codename: str = "tx-main"
     repo_description: str = "TX Linux Userspace for Android"
     repo_components: List[str] = field(default_factory=lambda: ["main"])
+    root_packages: Set[str] = field(default_factory=lambda: {
+        "bridge-utils", "dnsmasq", "ethtool", "iptables", "iputils",
+        "iw", "kmod", "nftables", "pciutils", "socat", "tcpdump",
+        "vlan", "wpa_supplicant"
+    })
 
     # URLs
     upstream_mirrors: List[str] = field(default_factory=lambda: [

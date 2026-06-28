@@ -50,19 +50,26 @@ class RepositoryGenerator:
         self.repository_dir = config.repository_dir
         self.packages_dir = config.packages_dir
 
-    def generate(self, recipes: List[Recipe]) -> Path:
+    def generate(self, recipes: List[Recipe], repository_dir: Optional[Path] = None) -> Path:
         """
         Generate the complete repository.
 
         Args:
             recipes: List of all recipes/packages in the repository
+            repository_dir: Optional override for the repository directory
 
         Returns:
             Path to the repository directory
         """
-        logger.info(f"Generating repository with {len(recipes)} packages")
+        if repository_dir:
+            self.repository_dir = repository_dir
+
+        logger.info(f"Generating repository at {self.repository_dir} with {len(recipes)} packages")
 
         self.repository_dir.mkdir(parents=True, exist_ok=True)
+
+        # Copy packages to repository first so they are indexed in SHA256SUMS
+        self._copy_packages_to_repo(recipes)
 
         # Generate package index
         self._generate_packages_index(recipes)
@@ -78,9 +85,6 @@ class RepositoryGenerator:
 
         # Generate repository metadata
         self._generate_metadata(recipes)
-
-        # Copy packages to repository
-        self._copy_packages_to_repo()
 
         logger.info(f"Repository generated: {self.repository_dir}")
         return self.repository_dir
@@ -241,16 +245,18 @@ class RepositoryGenerator:
         logger.info(f"Metadata written: {metadata_file}")
         return metadata_file
 
-    def _copy_packages_to_repo(self) -> None:
+    def _copy_packages_to_repo(self, recipes: List[Recipe]) -> None:
         """Copy or link packages into the repository."""
         pkgs_dir = self.repository_dir / "pkgs"
         pkgs_dir.mkdir(parents=True, exist_ok=True)
 
-        for pkg_file in self.packages_dir.rglob("*.txpkg*"):
-            dest = pkgs_dir / pkg_file.name
-            if not dest.exists():
-                shutil.copy2(pkg_file, dest)
-                logger.debug(f"Copied package: {pkg_file.name}")
+        for recipe in recipes:
+            pkg_file = self._find_package_file(recipe)
+            if pkg_file:
+                dest = pkgs_dir / pkg_file.name
+                if not dest.exists():
+                    shutil.copy2(pkg_file, dest)
+                    logger.debug(f"Copied package: {pkg_file.name}")
 
     def _find_package_file(self, recipe: Recipe) -> Optional[Path]:
         """Find the generated package file for a recipe."""
