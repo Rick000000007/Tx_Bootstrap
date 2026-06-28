@@ -144,6 +144,12 @@ class PackageBuilder:
                 if src_data.exists():
                     dst_data = self.config.artifacts_dir / "data"
                     self._merge_dirs(src_data, dst_data)
+                    # Clean up all libtool .la files to prevent cross-compilation libtool errors
+                    for la_file in dst_data.rglob("*.la"):
+                        try:
+                            la_file.unlink()
+                        except Exception:
+                            pass
 
             build_time = time.time() - start_time
             logger.info(f"Build completed: {recipe.name} in {build_time:.1f}s")
@@ -265,7 +271,7 @@ class PackageBuilder:
 
             logger.info(f"Applying patch: {patch_file}")
 
-            cmd = ['patch'] + recipe.patch_args + ['-i', str(patch_path)]
+            cmd = ['patch', '--binary'] + recipe.patch_args + ['-i', str(patch_path)]
             result = subprocess.run(
                 cmd,
                 cwd=source_dir,
@@ -467,6 +473,7 @@ sys_root = '{self.config.sysroot}'
                 make_args.append(f"AR={env.get('AR', 'llvm-ar')}")
                 make_args.append(f"RANLIB={env.get('RANLIB', 'llvm-ranlib')}")
                 make_args.append("CROSS_COMPILE=")
+                make_args.append("TARGET_ARCH=")
             self._run_command(
                 ['make'] + make_args,
                 build_dir, env
@@ -517,6 +524,7 @@ sys_root = '{self.config.sysroot}'
                 make_args.append(f"AR={env.get('AR', 'llvm-ar')}")
                 make_args.append(f"RANLIB={env.get('RANLIB', 'llvm-ranlib')}")
                 make_args.append("CROSS_COMPILE=")
+                make_args.append("TARGET_ARCH=")
             self._run_command(
                 ['make'] + make_args + ['install'],
                 build_dir, env

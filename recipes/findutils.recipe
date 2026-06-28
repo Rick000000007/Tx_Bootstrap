@@ -11,8 +11,12 @@ build_style = gnu
 source =
     https://mirrors.kernel.org/gnu/findutils/findutils-4.10.0.tar.xz    1387e0b67ff247d2abde998f90dfbf70c1491391a59ddfecb8ae698789f0a4f5
 
+env_vars =
+    ac_cv_func_localtime_rz=no
+    ac_cv_func_tzalloc=no
+    ac_cv_func_tzfree=no
+    ac_cv_func_mktime_z=no
+
 depends =
 
-
 makedepends =
-

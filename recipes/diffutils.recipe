@@ -11,8 +11,12 @@ build_style = gnu
 source =
     https://mirrors.kernel.org/gnu/diffutils/diffutils-3.10.tar.xz    90e5e93cc724e4ebe12ede80df1634063c7a855692685919bfe60b556c9bd09e
 
+env_vars =
+    ac_cv_func_localtime_rz=no
+    ac_cv_func_tzalloc=no
+    ac_cv_func_tzfree=no
+    ac_cv_func_mktime_z=no
+
 depends =
 
-
 makedepends =
-

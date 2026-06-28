@@ -19,6 +19,5 @@ depends =
     bzip2
     xz
     zstd
-    liblzma
 
 makedepends =

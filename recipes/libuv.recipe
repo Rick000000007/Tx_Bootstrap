@@ -7,12 +7,11 @@ license = MIT
 epoch = 0
 release = 1
 build_style = cmake
+extract_dir = libuv-v1.50.0
 
 source =
     https://dist.libuv.org/dist/v1.50.0/libuv-v1.50.0.tar.gz    6dc2b39aa7fa66c04e2e015bf47738b84e1c6b86b8987d57dd432d149d77ee25
 
 depends =
 
-
 makedepends =
-
