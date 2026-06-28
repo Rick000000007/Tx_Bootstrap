@@ -20,6 +20,9 @@ configure_args =
     --without-systemd
     --without-udev
 
+env_vars =
+    CFLAGS=-D_PATH_VI=\"/data/data/tx.packages/files/usr/bin/vi\"
+
 depends =
     ncurses
 

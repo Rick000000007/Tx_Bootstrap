@@ -13,7 +13,7 @@ source =
 
 pre_build_cmds =
     make -j4 -C src generic CC=clang AR="llvm-ar rcs" RANLIB=llvm-ranlib
-    make -C src install INSTALL_TOP="${DESTDIR}/data/data/tx.packages/files/usr"
+    make install INSTALL_TOP="${DESTDIR}/data/data/tx.packages/files/usr"
 
 depends =
 
