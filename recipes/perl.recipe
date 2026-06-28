@@ -14,7 +14,7 @@ source =
 
 pre_build_cmds =
     cp -rf ../perl-cross-1.6/* .
-    ./Configure --prefix=/data/data/tx.packages/files/usr --target=aarch64-linux-android
+    ./configure --prefix=/data/data/tx.packages/files/usr --host=aarch64-linux-android
 
 post_install_cmds =
     make install DESTDIR="${DESTDIR}/perl"

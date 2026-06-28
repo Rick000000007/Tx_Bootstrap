@@ -13,7 +13,7 @@ source =
 
 pre_build_cmds =
     echo "PREFIX=/data/data/tx.packages/files/usr" > configure.local
-    echo "CC=\"${CC}\"" >> configure.local
+    echo "CC=clang" >> configure.local
     echo "CFLAGS=\"${CFLAGS} -DNULL=0 -DBIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD\"" >> configure.local
     echo "LDFLAGS=\"${LDFLAGS}\"" >> configure.local
     echo "HAVE_STRLCAT=1" >> configure.local

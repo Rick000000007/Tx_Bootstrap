@@ -13,9 +13,9 @@ source =
 
 make_args =
     BUILD_CC=gcc
+    prefix=/data/data/tx.packages/files/usr
     DYNAMIC=no
     lib=lib
-    OBJCOPY=llvm-objcopy
 
 depends =
 

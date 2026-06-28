@@ -15,7 +15,7 @@ pre_build_cmds =
     sed -i 's/O_PATH/XT_O_PATH/g' extensions/libxt_cgroup.c
 
 env_vars =
-    CFLAGS=-Dindex=strchr -D__STDC_FORMAT_MACROS
+    CFLAGS=-Dindex=strchr -D_GNU_SOURCE -D__STDC_FORMAT_MACROS
 
 depends =
     libnftnl

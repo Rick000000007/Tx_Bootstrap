@@ -1,0 +1,17 @@
+name = wireless_tools
+version = 29
+category = networking
+description = Wireless tools for Linux
+homepage = https://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
+license = GPL-2.0-only
+epoch = 0
+release = 1
+build_style = make
+extract_dir = wireless_tools.29
+
+source =
+    https://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/wireless_tools.29.tar.gz    ebd9c9b572727d8cf865d1d6a78280f5ecb8b3b354ca7be36181b516805820ee
+
+depends =
+
+makedepends =

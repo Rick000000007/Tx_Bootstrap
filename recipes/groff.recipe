@@ -15,7 +15,7 @@ configure_args =
     --without-doc
 
 make_args =
-    SUBDIRS=src
+    GROFF=true
 
 depends =
 

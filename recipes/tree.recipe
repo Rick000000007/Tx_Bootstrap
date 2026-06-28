@@ -13,6 +13,7 @@ source =
 
 make_args =
     prefix=$(DESTDIR)/data/data/tx.packages/files/usr
+    MANDIR=$(DESTDIR)/data/data/tx.packages/files/usr/share/man/man1
 
 depends =
 
