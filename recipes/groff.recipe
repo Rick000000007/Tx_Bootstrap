@@ -7,7 +7,6 @@ license = GPL-3.0-or-later
 epoch = 0
 release = 1
 build_style = gnu
-build_dir = .
 
 source =
     https://mirrors.kernel.org/gnu/groff/groff-1.23.0.tar.gz    6b9757f592b7518b4902eb6af7e54570bdccba37a871fddb2d30ae3863511c13
@@ -16,7 +15,7 @@ configure_args =
     --without-doc
 
 make_args =
-    -C src
+    SUBDIRS=src
 
 depends =
 
