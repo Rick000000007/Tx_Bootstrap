@@ -15,6 +15,9 @@ configure_args =
     --enable-mpers=no
     --disable-werror
 
+env_vars =
+    CFLAGS=-Wno-error
+
 depends =
 
 makedepends =

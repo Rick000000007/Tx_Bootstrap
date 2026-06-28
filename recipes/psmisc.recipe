@@ -9,7 +9,7 @@ release = 1
 build_style = gnu
 
 source =
-    http://deb.debian.org/debian/pool/main/p/psmisc/psmisc_23.7.orig.tar.xz    b7074e6446736484a0d959556e8726591024346903f044703a94892700305a39
+    http://deb.debian.org/debian/pool/main/p/psmisc/psmisc_23.7.orig.tar.xz    58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327
 
 depends =
     ncurses

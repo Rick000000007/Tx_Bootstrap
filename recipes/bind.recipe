@@ -11,6 +11,9 @@ build_style = gnu
 source =
     https://downloads.isc.org/isc/bind9/9.20.4/bind-9.20.4.tar.xz    3a8e1a05e00e3e9bc02bdffded7862faf7726ba76ba997f42ab487777bd8210b
 
+configure_args =
+    --with-libuv=${DESTDIR}/data/data/tx.packages/files/usr
+
 depends =
     openssl
     libxml2

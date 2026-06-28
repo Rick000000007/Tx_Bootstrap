@@ -7,6 +7,7 @@ license = GPL-2.0-only
 epoch = 0
 release = 1
 build_style = custom
+extract_dir = vlan
 
 source =
     http://deb.debian.org/debian/pool/main/v/vlan/vlan_2.0.5.tar.xz    ccf261839b79247be8dae93074e1c5fcbce3807787a0ff7aed4e1f7a9095c465

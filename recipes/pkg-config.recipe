@@ -13,6 +13,7 @@ source =
 
 configure_args =
     --with-internal-glib
+    --with-libiconv=no
 
 env_vars =
     glib_cv_stack_grows=no
@@ -20,7 +21,6 @@ env_vars =
     glib_cv_have_qsort_r=yes
     ac_cv_func_posix_getpwuid_r=yes
     ac_cv_func_posix_getgrgid_r=yes
-    LIBS=-liconv
 
 depends =
 
