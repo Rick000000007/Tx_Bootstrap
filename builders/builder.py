@@ -58,11 +58,12 @@ class PackageBuilder:
             tz_c = self.config.artifacts_dir / "dummy_tz.c"
             tz_o = self.config.artifacts_dir / "dummy_tz.o"
             tz_c.write_text("#include <time.h>\n"
-                            "typedef void* timezone_t;\n"
+                            "#include <stdlib.h>\n"
+                            "/* NDK API 29+ already defines timezone_t, so we just provide stub functions */\n"
                             "timezone_t tzalloc(const char *name) { return (timezone_t)0; }\n"
-                            "void tzfree(timezone_t tz) {}\n"
-                            "struct tm *localtime_rz(timezone_t tz, const time_t *t, struct tm *tm) { return localtime_r(t, tm); }\n"
-                            "time_t mktime_z(timezone_t tz, struct tm *tm) { return mktime(tm); }\n")
+                            "void tzfree(timezone_t tz) { (void)tz; }\n"
+                            "struct tm *localtime_rz(timezone_t tz, const time_t *t, struct tm *tm) { (void)tz; return localtime_r(t, tm); }\n"
+                            "time_t mktime_z(timezone_t tz, struct tm *tm) { (void)tz; return mktime(tm); }\n")
             try:
                 triple_with_api = f"{self.config.target_triple}{self.config.min_api_level}"
                 subprocess.run([

@@ -320,12 +320,10 @@ class BuildConfig:
             "-Wl,--no-rosegment",
             "-Wl,--fatal-warnings",
             "-Wl,--gc-sections",
-            "-Wl,--no-undefined",
             "-Wl,--exclude-libs,libgcc.a",
             "-Wl,--exclude-libs,libgcc_real.a",
             "-Wl,--exclude-libs,libunwind.a",
             "-Wl,--undefined-version",
-            "-ldummy_tz",
         ]
 
         self.cppflags = [
