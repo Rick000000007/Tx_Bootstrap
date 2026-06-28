@@ -222,10 +222,6 @@ jobs:
     name: Build Packages
     runs-on: ubuntu-latest
     needs: [setup, download]
-    strategy:
-      fail-fast: false
-      matrix:
-        group: [core, shells, networking, compression, build-tools, languages, system, devel, doc]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -237,7 +233,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install zstandard requests
+          pip install zstandard requests setuptools
           sudo apt-get update
           sudo apt-get install -y cmake meson ninja-build autoconf automake libtool
 
@@ -260,7 +256,7 @@ jobs:
           name: tx-downloads
           path: downloads/
 
-      - name: Build ${{ matrix.group }} packages
+      - name: Build all packages sequentially
         run: |
           export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
           python3 -c "
@@ -268,21 +264,25 @@ jobs:
           from builders.config import BuildConfig
           from builders.recipe import RecipeParser
           from builders.builder import PackageBuilder
+          from builders.dependency import DependencyResolver
           config = BuildConfig()
           parser = RecipeParser(config.recipes_dir)
           recipes = parser.load_all()
           
-          group_recipes = [r for r in recipes.values() if r.category == '${{ matrix.group }}']
-          if not group_recipes:
-              print(f'No recipes in group: ${{ matrix.group }}')
-              sys.exit(0)
-          
-          print(f'Building {len(group_recipes)} ${{ matrix.group }} packages...')
+          resolver = DependencyResolver(recipes)
+          try:
+              build_order = resolver.resolve()
+          except Exception as e:
+              print(f'Dependency resolution failed: {e}')
+              sys.exit(1)
+              
+          print(f'Building {len(build_order)} packages sequentially in dependency order...')
           builder = PackageBuilder(config)
           
           success = 0
           failed = 0
-          for recipe in group_recipes:
+          for pkg_name in build_order:
+              recipe = recipes[pkg_name]
               try:
                   result = builder.build(recipe)
                   if result.success:
@@ -295,13 +295,15 @@ jobs:
                   failed += 1
                   print(f'  ERROR: {recipe.name}: {e}')
           
-          print(f'\n${{ matrix.group }}: {success} success, {failed} failed')
-          " || true
+          print(f'\nTotal Build Results: {success} success, {failed} failed')
+          if failed > 0:
+              sys.exit(1)
+          "
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tx-build-${{ matrix.group }}
+          name: tx-build-all
           path: |
             artifacts/
             packages/
@@ -327,9 +329,8 @@ jobs:
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
         with:
+          name: tx-build-all
           path: artifacts-temp/
-          pattern: tx-build-*
-          merge-multiple: true
 
       - name: Generate .txpkg files
         run: |

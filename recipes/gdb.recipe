@@ -17,6 +17,7 @@ depends =
     zlib
     xz
     python
+    gmp
+    mpfr
 
 makedepends =
-

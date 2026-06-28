@@ -16,5 +16,6 @@ env_vars =
 
 depends =
 
+patches =
+    wait4.patch
 
-makedepends =

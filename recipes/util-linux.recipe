@@ -11,10 +11,12 @@ build_style = gnu
 source =
     https://www.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.2.tar.xz    d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3
 
+configure_args =
+    --disable-liblastlog2
+
 depends =
     ncurses
     zlib
     readline
 
 makedepends =
-

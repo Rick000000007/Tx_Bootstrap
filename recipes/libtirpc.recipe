@@ -11,6 +11,9 @@ build_style = gnu
 source =
     https://ftp.osuosl.org/pub/blfs/conglomeration/libtirpc/libtirpc-1.3.4.tar.bz2    1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860
 
+configure_args =
+    --disable-gssapi
+
 depends =
 
 makedepends =

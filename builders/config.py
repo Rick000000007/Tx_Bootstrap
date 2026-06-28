@@ -324,6 +324,7 @@ class BuildConfig:
             "-Wl,--exclude-libs,libgcc.a",
             "-Wl,--exclude-libs,libgcc_real.a",
             "-Wl,--exclude-libs,libunwind.a",
+            "-Wl,--undefined-version",
         ]
 
         self.cppflags = [
@@ -331,6 +332,7 @@ class BuildConfig:
             f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include",
             "-DANDROID",
             f"-D__ANDROID_API__={self.min_api_level}",
+            "-D_GNU_SOURCE",
         ]
 
         if self.debug:

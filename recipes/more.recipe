@@ -7,6 +7,7 @@ license = GPL-2.0-or-later
 epoch = 0
 release = 1
 build_style = gnu
+extract_dir = util-linux-2.40
 
 source =
     https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/util-linux-2.40.tar.xz    d57a626081f9ead02fa44c63a6af162ec19c58f53e993f206ab7c3a6641c2cd7
@@ -15,4 +16,3 @@ depends =
     ncurses
 
 makedepends =
-

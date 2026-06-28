@@ -452,6 +452,12 @@ sys_root = '{self.config.sysroot}'
             # GNU autotools, make, custom
             make_args = [parallel_flag]
             make_args.extend(recipe.make_args)
+            if build_style == "make":
+                make_args.append(f"CC={env.get('CC', 'clang')}")
+                make_args.append(f"CXX={env.get('CXX', 'clang++')}")
+                make_args.append(f"AR={env.get('AR', 'llvm-ar')}")
+                make_args.append(f"RANLIB={env.get('RANLIB', 'llvm-ranlib')}")
+                make_args.append("CROSS_COMPILE=")
             self._run_command(
                 ['make'] + make_args,
                 build_dir, env
@@ -495,8 +501,16 @@ sys_root = '{self.config.sysroot}'
             )
         else:
             # GNU autotools, make
+            make_args = [f'DESTDIR={install_prefix}']
+            make_args.extend(recipe.make_args)
+            if build_style == "make":
+                make_args.append(f"CC={env.get('CC', 'clang')}")
+                make_args.append(f"CXX={env.get('CXX', 'clang++')}")
+                make_args.append(f"AR={env.get('AR', 'llvm-ar')}")
+                make_args.append(f"RANLIB={env.get('RANLIB', 'llvm-ranlib')}")
+                make_args.append("CROSS_COMPILE=")
             self._run_command(
-                ['make', f'DESTDIR={install_prefix}', 'install'],
+                ['make'] + make_args + ['install'],
                 build_dir, env
             )
 

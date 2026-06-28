@@ -11,8 +11,10 @@ build_style = meson
 source =
     https://github.com/iputils/iputils/archive/refs/tags/20240117.tar.gz    a5d66e2997945b2541b8f780a7f5a5ec895d53a517ae1dc4f3ab762573edea9a
 
+pre_build_cmds =
+    sed -i "s/cc.find_library('resolv')/cc.find_library('resolv', required : false)/g" meson.build
+
 depends =
     libcap
 
 makedepends =
-

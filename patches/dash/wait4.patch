@@ -1,0 +1,15 @@
+--- a/src/jobs.c
++++ b/src/jobs.c
+@@ -107,11 +107,7 @@
+ 	int status;
+ 	int errno_copy;
+ 
+-#if HAVE_WAIT3
+-	jp = wait3(status, flags, NULL);
+-#else
+-	jp = wait4(-1, status, flags, NULL);
+-#endif
++	jp = wait4(-1, status, flags, NULL);
+ 	return jp;
+ }
+ #endif

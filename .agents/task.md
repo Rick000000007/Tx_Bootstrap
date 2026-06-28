@@ -1,0 +1,10 @@
+- [x] Create patches/dash/wait4.patch
+- [x] Update recipes/dash.recipe
+- [x] Update recipes/cmake.recipe
+- [x] Update builders/config.py
+- [x] Update builders/builder.py
+- [x] Update Autotools recipes env_vars (m4, make, pkg-config)
+- [x] Update system recipes (argon2, procps, psmisc, lvm2, cryptsetup, kmod, libtirpc, kbd, iputils, util-linux)
+- [x] Update devel recipes (file, gdb, liburcu, more, perf, strace, tree, valgrind)
+- [x] Disable unsupported/missing dependency recipes (shadow, usbutils, elfutils)
+- [x] Update .github/workflows/ci.yml

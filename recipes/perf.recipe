@@ -7,6 +7,7 @@ license = GPL-2.0-only
 epoch = 0
 release = 1
 build_style = make
+extract_dir = linux-6.13
 
 source =
     https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.13.tar.xz    e79dcc6eb86695c6babfb07c2861912b635d5075c6cd1cd0567d1ea155f80d6e
@@ -17,4 +18,3 @@ depends =
     numactl
 
 makedepends =
-

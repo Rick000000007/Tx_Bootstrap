@@ -11,6 +11,9 @@ build_style = gnu
 source =
     https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/cryptsetup-2.7.5.tar.xz    d2be4395b8f503b0ebf4b2d81db90c35a97050a358ee21fe62a0dfb66e5d5522
 
+configure_args =
+    --disable-asciidoc
+
 depends =
     openssl
     json-c
@@ -20,4 +23,3 @@ depends =
     util-linux
 
 makedepends =
-

@@ -13,6 +13,8 @@ source =
 
 env_vars =
     CFLAGS=-U_FORTIFY_SOURCE
+    ac_cv_func_strerror_r_char_p=no
+
 
 depends =
 
