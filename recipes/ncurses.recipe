@@ -21,9 +21,9 @@ configure_args =
     --program-prefix=
 
 post_install_cmds =
-    LIBDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib" && mkdir -p "${LIBDIR}" && for lib in ncurses form panel menu; do ln -sf lib${lib}w.a "${LIBDIR}/lib${lib}.a"; done; true
+    LIBDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib" && mkdir -p "${LIBDIR}" && for lib in ncurses form panel menu; do ln -sf lib${lib}w.a "${LIBDIR}/lib${lib}.a"; done && ln -sf libncursesw.a "${LIBDIR}/libtinfow.a" && ln -sf libncurses.a "${LIBDIR}/libtinfo.a"; true
     INCDIR="${DESTDIR}/data/data/tx.packages/files/usr/include" && mkdir -p "${INCDIR}" && ln -sf ncursesw "${INCDIR}/ncurses" && for h in ncurses.h curses.h term.h; do test -f "${INCDIR}/ncursesw/${h}" && ln -sf "ncursesw/${h}" "${INCDIR}/${h}"; done; true
-    PKGDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib/pkgconfig" && mkdir -p "${PKGDIR}" && test -f "${PKGDIR}/ncursesw.pc" && ln -sf ncursesw.pc "${PKGDIR}/ncurses.pc"; true
+    PKGDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib/pkgconfig" && mkdir -p "${PKGDIR}" && test -f "${PKGDIR}/ncursesw.pc" && ln -sf ncursesw.pc "${PKGDIR}/ncurses.pc" && ln -sf ncursesw.pc "${PKGDIR}/tinfow.pc" && ln -sf ncurses.pc "${PKGDIR}/tinfo.pc"; true
 
 make_args =
     INSTALL="install -c"
