@@ -14,6 +14,9 @@ source =
 configure_args =
     --enable-only64bit
 
+env_vars =
+    LDFLAGS=-Wl,--allow-shlib-undefined
+
 depends =
 
 makedepends =

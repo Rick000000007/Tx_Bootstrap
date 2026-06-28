@@ -6,13 +6,17 @@ homepage = https://www.candelatech.com/~greear/vlan.html
 license = GPL-2.0-only
 epoch = 0
 release = 1
-build_style = make
+build_style = custom
 
 source =
     http://deb.debian.org/debian/pool/main/v/vlan/vlan_2.0.5.tar.xz    ccf261839b79247be8dae93074e1c5fcbce3807787a0ff7aed4e1f7a9095c465
 
+pre_install_cmds =
+    mkdir -p "$DESTDIR/vlan/data/data/tx.packages/files/usr/bin"
+    mkdir -p "$DESTDIR/vlan/data/data/tx.packages/files/usr/share/man/man8"
+    cp vconfig "$DESTDIR/vlan/data/data/tx.packages/files/usr/bin/"
+    cp vconfig.8 "$DESTDIR/vlan/data/tx.packages/files/usr/share/man/man8/"
+
 depends =
 
-
 makedepends =
-

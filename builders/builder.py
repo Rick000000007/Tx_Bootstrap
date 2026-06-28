@@ -138,6 +138,13 @@ class PackageBuilder:
             # Mark as cached
             cache_marker.touch()
 
+            # Merge into the global shared sysroot so subsequent packages can build against it
+            if install_prefix.exists():
+                src_data = install_prefix / "data"
+                if src_data.exists():
+                    dst_data = self.config.artifacts_dir / "data"
+                    self._merge_dirs(src_data, dst_data)
+
             build_time = time.time() - start_time
             logger.info(f"Build completed: {recipe.name} in {build_time:.1f}s")
 
@@ -174,6 +181,10 @@ class PackageBuilder:
     def _extract_sources(self, recipe: Recipe) -> Path:
         """Extract sources to the sources directory."""
         source_dir = self.config.sources_dir / recipe.source_dir
+
+        if recipe.build_style.lower() == "meta" or not recipe.sources:
+            source_dir.mkdir(parents=True, exist_ok=True)
+            return source_dir
 
         # Remove existing source directory for clean build
         if source_dir.exists():
@@ -277,8 +288,7 @@ class PackageBuilder:
             # Meta package - no build needed
             return source_dir
 
-        env = self.config.env.copy()
-        env.update(recipe.env_vars)
+        env = self._get_recipe_env(recipe)
 
         if build_style == "gnu":
             return self._configure_gnu(recipe, source_dir, env)
@@ -423,8 +433,7 @@ sys_root = '{self.config.sysroot}'
 
     def _run_build(self, recipe: Recipe, build_dir: Path) -> None:
         """Run the build step."""
-        env = self.config.env.copy()
-        env.update(recipe.env_vars)
+        env = self._get_recipe_env(recipe)
 
         build_style = recipe.build_style.lower()
         parallel_flag = f"-j{self.config.parallel_jobs}"
@@ -465,8 +474,7 @@ sys_root = '{self.config.sysroot}'
 
     def _install(self, recipe: Recipe, build_dir: Path) -> Path:
         """Install package to staging directory."""
-        env = self.config.env.copy()
-        env.update(recipe.env_vars)
+        env = self._get_recipe_env(recipe)
 
         # Create package-specific staging directory
         install_prefix = self.config.artifacts_dir / recipe.name
@@ -478,8 +486,8 @@ sys_root = '{self.config.sysroot}'
 
         build_style = recipe.build_style.lower()
 
-        if build_style == "meta":
-            # Meta package - no install needed
+        if build_style in ("meta", "custom"):
+            # Meta or custom package - no install needed
             pass
         elif build_style == "python":
             self._run_command(
@@ -557,8 +565,7 @@ sys_root = '{self.config.sysroot}'
 
     def _run_commands(self, commands: List[str], cwd: Path, recipe: Recipe, stage: str) -> None:
         """Run a list of shell commands."""
-        env = self.config.env.copy()
-        env.update(recipe.env_vars)
+        env = self._get_recipe_env(recipe)
 
         for cmd in commands:
             logger.debug(f"Running [{stage}]: {cmd}")
@@ -606,6 +613,29 @@ sys_root = '{self.config.sysroot}'
                 callback(pkg_name, stage, success)
             except Exception:
                 pass
+
+    def _merge_dirs(self, src: Path, dst: Path) -> None:
+        """Recursively merge src directory into dst directory."""
+        if not dst.exists():
+            dst.mkdir(parents=True, exist_ok=True)
+        for item in src.iterdir():
+            d_item = dst / item.name
+            if item.is_dir():
+                self._merge_dirs(item, d_item)
+            else:
+                if d_item.exists():
+                    d_item.unlink()
+                shutil.copy2(item, d_item)
+
+    def _get_recipe_env(self, recipe: Recipe) -> Dict[str, str]:
+        """Get the environment variables for a recipe, merging flags."""
+        env = self.config.env.copy()
+        for k, v in recipe.env_vars.items():
+            if k in env and k in ("CFLAGS", "CXXFLAGS", "LDFLAGS", "CPPFLAGS"):
+                env[k] = f"{env[k]} {v}"
+            else:
+                env[k] = v
+        return env
 
 
 class BuildError(Exception):
