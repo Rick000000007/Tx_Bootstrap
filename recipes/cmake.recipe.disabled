@@ -11,9 +11,9 @@ build_style = cmake
 source =
     https://github.com/Kitware/CMake/releases/download/v3.31.5/cmake-3.31.5.tar.gz    66fb53a145648be56b46fa9e8ccade3a4d0dfc92e401e52ce76bdad1fea43d27
 
+env_vars =
+    CFLAGS=-D_GNU_SOURCE
+
 depends =
     ncurses
     openssl
-
-
-

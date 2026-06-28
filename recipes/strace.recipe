@@ -12,7 +12,7 @@ source =
     https://github.com/strace/strace/releases/download/v6.12/strace-6.12.tar.xz    c47da93be45b6055f4dc741d7f20efaf50ca10160a5b100c109b294fd9c0bdfe
 
 configure_args =
-    --disable-m32-personality
+    --enable-mpers=no
 
 depends =
 

@@ -11,8 +11,10 @@ build_style = gnu
 source =
     https://mirrors.kernel.org/gnu/patch/patch-2.7.6.tar.xz    ac610bda97abe0d9f6b7c963255a11dcb196c25e337c61f94e4778d632f1d8fd
 
+env_vars =
+    LIBS=-ldummy_tz
+    ac_cv_func_strerror_r_char_p=no
+
 depends =
 
-
 makedepends =
-

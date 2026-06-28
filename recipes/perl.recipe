@@ -6,13 +6,17 @@ homepage = https://www.perl.org/
 license = Artistic-1.0-Perl OR GPL-1.0-or-later
 epoch = 0
 release = 1
-build_style = gnu
+build_style = custom
 
 source =
     https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz    dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f
 
+pre_build_cmds =
+    ./Configure -des -Dprefix=/data/data/tx.packages/files/usr -Dcc="${CC}" -Dld="${CC}" -Dar="${AR}" -Dfull_ar="${AR}" -Dranlib="${RANLIB}" -Dtargetarch=aarch64-linux-android -Dusecrosscompile -Dtargethost=localhost -Duseshrplib=false -Dusedl=no -Dlibs="-lm -ldl" -Duse64bitall -Dusethreads
+
+post_install_cmds =
+    make install DESTDIR="${DESTDIR}/perl"
+
 depends =
 
-
 makedepends =
-

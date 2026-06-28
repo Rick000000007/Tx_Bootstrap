@@ -328,6 +328,7 @@ class BuildConfig:
         self.cppflags = [
             f"-I{self.sysroot}/usr/include/{self.target_triple}",
             f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include",
+            f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include/ncursesw",
             "-DANDROID",
             "-D_GNU_SOURCE",
         ]

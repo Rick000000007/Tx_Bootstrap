@@ -15,6 +15,9 @@ env_vars =
     LIBS=-ldummy_tz
     ac_cv_func_strerror_r_char_p=no
 
+configure_args =
+    --without-libiconv-prefix
+
 depends =
 
 makedepends =

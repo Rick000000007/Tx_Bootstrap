@@ -13,9 +13,11 @@ source =
 
 configure_args =
     --enable-only64bit
+    --without-mpicc
 
 env_vars =
     LDFLAGS=-Wl,--allow-shlib-undefined
+    CFLAGS=-Dpthread_cancel(x)=((void)(x))
 
 depends =
 

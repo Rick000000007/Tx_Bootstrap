@@ -675,7 +675,13 @@ cpp_link_args = [{link_args_str}]
             dst.mkdir(parents=True, exist_ok=True)
         for item in src.iterdir():
             d_item = dst / item.name
-            if item.is_dir():
+            if item.is_symlink():
+                # Preserve symlinks
+                link_target = os.readlink(item)
+                if d_item.exists() or d_item.is_symlink():
+                    d_item.unlink()
+                os.symlink(link_target, d_item)
+            elif item.is_dir():
                 self._merge_dirs(item, d_item)
             else:
                 if d_item.exists():

@@ -12,9 +12,7 @@ source =
     https://deb.debian.org/debian/pool/main/t/tree/tree_2.2.1.orig.tar.gz    68ac45dc78c0c311ada06200ffc3c285e74223ba208061f8d15ffac25e44b2ec
 
 make_args =
-    prefix=/data/data/tx.packages/files/usr
-    MANDIR=/data/data/tx.packages/files/usr/share/man/man1
-    BINDIR=/data/data/tx.packages/files/usr/bin
+    PREFIX=/data/data/tx.packages/files/usr
 
 depends =
 
