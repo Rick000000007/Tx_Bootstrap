@@ -16,7 +16,5 @@ env_vars =
 
 depends =
     ncurses
-    jansson
 
 makedepends =
-

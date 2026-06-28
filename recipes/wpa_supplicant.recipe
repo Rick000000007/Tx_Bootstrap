@@ -10,6 +10,7 @@ build_style = make
 build_dir = wpa_supplicant
 pre_build_cmds =
     cp wpa_supplicant/defconfig wpa_supplicant/.config
+    sed -i 's/CONFIG_CTRL_IFACE_DBUS/#CONFIG_CTRL_IFACE_DBUS/g' wpa_supplicant/.config
 
 source =
     https://w1.fi/releases/wpa_supplicant-2.11.tar.gz    912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a
@@ -17,7 +18,6 @@ source =
 depends =
     openssl
     libnl
-    dbus
     readline
 
 makedepends =

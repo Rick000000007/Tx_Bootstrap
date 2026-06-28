@@ -11,11 +11,12 @@ build_style = gnu
 source =
     https://netfilter.org/projects/nftables/files/nftables-1.1.1.tar.xz    6358830f3a64f31e39b0ad421d7dadcd240b72343ded48d8ef13b8faf204865a
 
+configure_args =
+    --with-json=no
+
 depends =
     libmnl
     libnftnl
     libpcap
-    jansson
 
 makedepends =
-

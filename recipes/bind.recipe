@@ -16,8 +16,7 @@ depends =
     libxml2
     libuv
     json-c
-    libnghttp2
+    nghttp2
     liburcu
 
 makedepends =
-

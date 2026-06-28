@@ -15,9 +15,7 @@ env_vars =
     CFLAGS=-DETHER_ADDR_LEN=6
 
 depends =
-    dbus
     libidn2
     nettle
 
 makedepends =
-

@@ -14,7 +14,5 @@ source =
 depends =
     zlib
     kmod
-    hwdata
 
 makedepends =
-

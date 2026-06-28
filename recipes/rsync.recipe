@@ -11,12 +11,13 @@ build_style = gnu
 source =
     https://rsync.samba.org/ftp/rsync/src/rsync-3.4.1.tar.gz    2924bcb3a1ed8b551fc101f740b9f0fe0a202b115027647cf69850d65fd88c52
 
+configure_args =
+    --disable-xxhash
+
 depends =
     zlib
     zstd
     lz4
     openssl
-    xxhash
 
 makedepends =
-
