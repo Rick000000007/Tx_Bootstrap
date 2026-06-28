@@ -14,7 +14,7 @@ source =
 
 pre_build_cmds =
     cp unix/Makefile Makefile
-    make -f unix/Makefile generic CC=clang LD=clang CF="${CFLAGS} -Wno-error -DBSD"
+    make -f unix/Makefile generic CC="${CC}" LD="${CC}" CF="${CFLAGS} -Wno-error -DBSD"
     make -f unix/Makefile install prefix="${DESTDIR}/data/data/tx.packages/files/usr"
 
 depends =

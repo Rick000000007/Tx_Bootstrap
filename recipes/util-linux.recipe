@@ -14,6 +14,7 @@ source =
 configure_args =
     --disable-liblastlog2
     --disable-lsmem
+    --disable-lsns
 
 depends =
     ncurses

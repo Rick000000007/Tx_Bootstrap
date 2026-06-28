@@ -259,22 +259,57 @@ class PackageGenerator:
 
     def _add_files_to_tar(self, tf: tarfile.TarFile, install_prefix: Path,
                           manifest: PackageManifest) -> None:
-        """Add installed files to the tar archive."""
-        prefix = ".TXPKG/ROOT"
+         """Add installed files to the tar archive."""
+         prefix = ".TXPKG/ROOT"
 
+         if not install_prefix.exists():
+             return
+
+         # Clean any absolute symlinks pointing to build tree
+         self._clean_absolute_symlinks(install_prefix)
+
+         for root, dirs, files in os.walk(install_prefix):
+             for filename in files:
+                 file_path = Path(root) / filename
+                 rel_path = file_path.relative_to(install_prefix)
+                 arcname = f"{prefix}/{rel_path}"
+
+                 try:
+                     tf.add(file_path, arcname=arcname)
+                 except Exception as e:
+                     logger.warning(f"Failed to add {rel_path} to package: {e}")
+
+    def _clean_absolute_symlinks(self, install_prefix: Path) -> None:
+        """Find and fix absolute symlinks pointing to the build-time destination directory."""
         if not install_prefix.exists():
             return
 
-        for root, dirs, files in os.walk(install_prefix):
-            for filename in files:
-                file_path = Path(root) / filename
-                rel_path = file_path.relative_to(install_prefix)
-                arcname = f"{prefix}/{rel_path}"
+        runtime_prefix = "/data/data/tx.packages/files/usr"
 
-                try:
-                    tf.add(file_path, arcname=arcname)
-                except Exception as e:
-                    logger.warning(f"Failed to add {rel_path} to package: {e}")
+        for root, dirs, files in os.walk(install_prefix, followlinks=False):
+            for name in files + dirs:
+                path = Path(root) / name
+                if path.is_symlink():
+                    try:
+                        target = os.readlink(path)
+                        # Check if target points to host build paths or DESTDIR
+                        if str(install_prefix) in target or "/home/runner/work/" in target:
+                            build_prefix_str = str(install_prefix)
+                            if target.startswith(build_prefix_str):
+                                suffix = target[len(build_prefix_str):]
+                                cleaned_target = f"{runtime_prefix}{suffix}"
+                            else:
+                                idx = target.find("/data/data/tx.packages/files/usr")
+                                if idx != -1:
+                                    cleaned_target = target[idx:]
+                                else:
+                                    cleaned_target = os.path.basename(target)
+                            
+                            path.unlink()
+                            path.symlink_to(cleaned_target)
+                            logger.info(f"Fixed absolute symlink: {path.relative_to(install_prefix)} -> {cleaned_target}")
+                    except Exception as e:
+                        logger.warning(f"Failed to clean symlink {path}: {e}")
 
     def _generate_control(self, manifest: PackageManifest) -> str:
         """Generate Debian-like control file for compatibility."""
