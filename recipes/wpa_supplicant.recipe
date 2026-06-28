@@ -15,8 +15,6 @@ pre_build_cmds =
     cp wpa_supplicant/defconfig wpa_supplicant/.config
     sed -i 's/CONFIG_CTRL_IFACE_DBUS/#CONFIG_CTRL_IFACE_DBUS/g' wpa_supplicant/.config
     make -C wpa_supplicant -j4 CC=clang AR=llvm-ar RANLIB=llvm-ranlib
-
-post_install_cmds =
     make -C wpa_supplicant install DESTDIR="${DESTDIR}/wpa_supplicant"
 
 depends =

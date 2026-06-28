@@ -25,8 +25,7 @@ pre_build_cmds =
     echo "HAVE_O_DIRECTORY=1" >> configure.local
     echo "HAVE_ISBLANK=1" >> configure.local
     ./configure
-
-post_install_cmds =
+    make -j4
     make install DESTDIR="$DESTDIR/mandoc"
 
 depends =

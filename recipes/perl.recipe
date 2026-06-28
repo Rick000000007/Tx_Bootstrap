@@ -15,8 +15,7 @@ source =
 pre_build_cmds =
     cp -rf ../perl-cross-1.6.1/* .
     ./configure --prefix=/data/data/tx.packages/files/usr --host=aarch64-linux-android
-
-post_install_cmds =
+    make -j4
     make install DESTDIR="${DESTDIR}/perl"
 
 depends =
