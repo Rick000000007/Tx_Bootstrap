@@ -122,7 +122,9 @@ class Recipe:
     @property
     def pkg_filename(self) -> str:
         """Get the package filename."""
-        return f"{self.name}-{self.full_version}.txpkg"
+        if self.epoch > 0:
+            return f"{self.name}-{self.epoch}_{self.version}-{self.release}.txpkg"
+        return f"{self.name}-{self.version}-{self.release}.txpkg"
 
     @property
     def source_dir(self) -> str:

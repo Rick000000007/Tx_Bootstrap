@@ -137,8 +137,25 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
             logger.info(f"Bootstrap generated: {bootstrap_path}")
         else:
             # Generate both standard and root bootstraps
-            standard_recipes = [r for r in recipes.values() if r.name not in config.root_packages]
-            root_recipes = [r for r in recipes.values() if r.name in config.root_packages]
+            resolver = DependencyResolver(recipes)
+
+            # Resolve standard bootstrap packages recursively
+            std_targets = [p for p in config.bootstrap_base_packages if p in recipes]
+            try:
+                std_names = resolver.resolve(std_targets)
+                standard_recipes = [recipes[name] for name in std_names if name in recipes and name not in config.root_packages]
+            except Exception as e:
+                logger.warning(f"Failed to resolve standard bootstrap dependencies: {e}. Falling back to list.")
+                standard_recipes = [recipes[p] for p in config.bootstrap_base_packages if p in recipes]
+
+            # Resolve root bootstrap packages recursively
+            root_targets = [p for p in config.root_packages if p in recipes]
+            try:
+                root_names = resolver.resolve(root_targets)
+                root_recipes = [recipes[name] for name in root_names if name in recipes]
+            except Exception as e:
+                logger.warning(f"Failed to resolve root bootstrap dependencies: {e}. Falling back to list.")
+                root_recipes = [recipes[p] for p in config.root_packages if p in recipes]
 
             path_std = generator.generate(standard_recipes, config.packages_dir, "bootstrap")
             logger.info(f"Standard Bootstrap generated: {path_std}")

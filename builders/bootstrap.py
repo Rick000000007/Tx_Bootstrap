@@ -111,12 +111,13 @@ class BootstrapGenerator:
 
     def _install_package(self, recipe: Recipe, packages_dir: Path, prefix: Path) -> None:
         """Install a package into the bootstrap prefix."""
-        # Find the .txpkg file
-        pkg_file = packages_dir / recipe.name / f"{recipe.name}-{recipe.full_version}.txpkg"
+        pkg_file = packages_dir / recipe.name / recipe.pkg_filename
         if not pkg_file.exists():
             # Try alternative naming
             for ext in ['.txpkg', '.txpkg.gz', '.txpkg.zst']:
-                alt = packages_dir / f"{recipe.name}-{recipe.full_version}{ext}"
+                alt = packages_dir / f"{recipe.name}-{recipe.full_version.replace(':', '_')}{ext}"
+                if not alt.exists():
+                    alt = packages_dir / f"{recipe.name}-{recipe.full_version}{ext}"
                 if alt.exists():
                     pkg_file = alt
                     break

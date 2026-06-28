@@ -271,7 +271,19 @@ class RepositoryGenerator:
             if not search_dir.exists():
                 continue
 
+            # Try clean filename first
+            pkg_file = search_dir / recipe.pkg_filename
+            if pkg_file.exists():
+                return pkg_file
+
             for ext in ['.txpkg', '.txpkg.gz', '.txpkg.zst']:
+                # Try underscores
+                pattern = f"{recipe.name}-{recipe.full_version.replace(':', '_')}{ext}"
+                pkg_file = search_dir / pattern
+                if pkg_file.exists():
+                    return pkg_file
+
+                # Fallback to colons
                 pattern = f"{recipe.name}-{recipe.full_version}{ext}"
                 pkg_file = search_dir / pattern
                 if pkg_file.exists():

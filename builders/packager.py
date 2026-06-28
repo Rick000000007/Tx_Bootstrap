@@ -369,5 +369,9 @@ class PackageGenerator:
 
 # Monkey-patch manifest for pkg_filename property
 PackageManifest.pkg_filename = property(
-    lambda self: f"{self.name}-{self.epoch or 0}:{self.version}-{self.release}.txpkg"
+    lambda self: (
+        f"{self.name}-{self.epoch}_{self.version}-{self.release}.txpkg"
+        if self.epoch and self.epoch > 0
+        else f"{self.name}-{self.version}-{self.release}.txpkg"
+    )
 )

@@ -138,6 +138,12 @@ class BuildConfig:
         "iw", "kmod", "nftables", "pciutils", "socat", "tcpdump",
         "vlan", "wpa_supplicant"
     })
+    bootstrap_base_packages: Set[str] = field(default_factory=lambda: {
+        "bash", "dash", "coreutils", "util-linux", "findutils", "diffutils",
+        "grep", "sed", "which", "tx-base", "tx-cli", "tx-pkg", "tx-runtime",
+        "procps", "psmisc", "tar", "bzip2", "gzip", "xz", "unzip", "zip",
+        "curl", "nano", "patch", "less", "ca-certificates"
+    })
 
     # URLs
     upstream_mirrors: List[str] = field(default_factory=lambda: [
