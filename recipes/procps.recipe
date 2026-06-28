@@ -12,6 +12,12 @@ extract_dir = procps-ng-4.0.4
 source =
     http://deb.debian.org/debian/pool/main/p/procps/procps_4.0.4.orig.tar.xz    22870d6feb2478adb617ce4f09a787addaf2d260c5a8aa7b17d889a962c5e42e
 
+pre_build_cmds =
+    python3 -c "code = open('local/procio.c').read(); patch = '\n#ifdef __ANDROID__\ntypedef int cookie_io_functions_t;\nstatic ssize_t proc_read(void *, char *, size_t);\nstatic ssize_t proc_write(void *, const char *, size_t);\nstatic int proc_close(void *);\nstatic int proc_read_android(void *c, char *buf, int count) { return (int)proc_read(c, buf, (size_t)count); }\nstatic int proc_write_android(void *c, const char *buf, int count) { return (int)proc_write(c, buf, (size_t)count); }\n#define fopencookie(cookie, mode, procio) funopen(cookie, proc_read_android, proc_write_android, NULL, proc_close)\n#define procio 0\n#endif\n'; code = code.replace('#include <unistd.h>', '#include <unistd.h>' + patch).replace('__extension__\nstatic cookie_io_functions_t procio = {', '#ifndef __ANDROID__\n__extension__\nstatic cookie_io_functions_t procio = {').replace('    .close = proc_close,\n};', '    .close = proc_close,\n};\n#endif'); open('local/procio.c', 'w').write(code)"
+
+env_vars =
+    CFLAGS=-Wno-invalid-token-paste
+
 depends =
     ncurses
 

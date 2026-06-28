@@ -11,6 +11,9 @@ build_style = gnu
 source =
     http://deb.debian.org/debian/pool/main/p/psmisc/psmisc_23.7.orig.tar.xz    58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327
 
+pre_build_cmds =
+    sed -i 's/man-po//g' Makefile.am
+
 env_vars =
     ac_cv_func_malloc_0_nonnull=yes
     ac_cv_func_realloc_0_nonnull=yes

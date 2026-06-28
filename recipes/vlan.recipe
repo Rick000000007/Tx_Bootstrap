@@ -11,13 +11,11 @@ build_style = custom
 source =
     http://deb.debian.org/debian/pool/main/v/vlan/vlan_2.0.5.tar.xz    ccf261839b79247be8dae93074e1c5fcbce3807787a0ff7aed4e1f7a9095c465
 
-pre_build_cmds =
-    clang --target=aarch64-linux-android29 --sysroot=/home/runner/work/_temp/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot vconfig.c -o vconfig
-
 pre_install_cmds =
     mkdir -p "${DESTDIR}/data/data/tx.packages/files/usr/bin"
     mkdir -p "${DESTDIR}/data/data/tx.packages/files/usr/share/man/man8"
     cp vconfig "${DESTDIR}/data/data/tx.packages/files/usr/bin/"
+    chmod +x "${DESTDIR}/data/data/tx.packages/files/usr/bin/vconfig"
     cp vconfig.8 "${DESTDIR}/data/data/tx.packages/files/usr/share/man/man8/"
 
 depends =

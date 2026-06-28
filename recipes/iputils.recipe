@@ -16,6 +16,7 @@ pre_build_cmds =
 
 meson_args =
     -DBUILD_MANS=false
+    -DUSE_GETTEXT=false
 
 env_vars =
     LIBRARY_PATH=${DESTDIR}/data/data/tx.packages/files/usr/lib
