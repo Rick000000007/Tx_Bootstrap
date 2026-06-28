@@ -9,7 +9,7 @@ release = 1
 build_style = gnu
 
 source =
-    https://download-mirror.savannah.gnu.org/releases/attr/attr-2.5.2.tar.xz    f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b
+    http://deb.debian.org/debian/pool/main/a/attr/attr_2.5.2.orig.tar.xz    f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b
 
 depends =
 
