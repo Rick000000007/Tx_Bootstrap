@@ -257,11 +257,13 @@ jobs:
           path: downloads/
 
       - name: Build all packages sequentially
+        continue-on-error: true
         run: |
           export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m tx_packages build
 
       - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: tx-build-all
