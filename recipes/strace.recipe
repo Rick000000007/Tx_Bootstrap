@@ -13,6 +13,7 @@ source =
 
 configure_args =
     --enable-mpers=no
+    --disable-werror
 
 depends =
 

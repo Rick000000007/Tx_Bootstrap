@@ -6,11 +6,14 @@ homepage = https://www.sqlite.org/
 license = Public Domain
 epoch = 0
 release = 1
-build_style = gnu
+build_style = custom
 extract_dir = sqlite-autoconf-3490100
 
 source =
     https://www.sqlite.org/2025/sqlite-autoconf-3490100.tar.gz    106642d8ccb36c5f7323b64e4152e9b719f7c0215acf5bfeac3d5e7f97b59254
+
+pre_build_cmds =
+    ./configure --prefix=/data/data/tx.packages/files/usr --host=aarch64-linux-android
 
 depends =
 

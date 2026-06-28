@@ -6,11 +6,18 @@ homepage = https://infozip.org/
 license = Info-ZIP
 epoch = 0
 release = 1
-build_style = make
+build_style = custom
 extract_dir = unzip60
 
 source =
     http://deb.debian.org/debian/pool/main/u/unzip/unzip_6.0.orig.tar.gz    036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
+
+pre_build_cmds =
+    cp unix/Makefile Makefile
+    make -f unix/Makefile generic CC="${CC}" LD="${CC}" CF="${CFLAGS} -DBSD"
+
+post_install_cmds =
+    make -f unix/Makefile install prefix="${DESTDIR}/data/data/tx.packages/files/usr"
 
 depends =
 

@@ -7,6 +7,7 @@ license = GPL-2.0-only
 epoch = 0
 release = 1
 build_style = gnu
+build_dir = .
 
 source =
     http://www.dest-unreach.org/socat/download/socat-1.8.0.1.tar.gz    dc350411e03da657269e529c4d49fe23ba7b4610b0b225c020df4cf9b46e6982
