@@ -14,6 +14,7 @@ source =
 env_vars =
     ac_cv_func_strerror_r_char_p=no
     ac_cv_func_confstr=no
+    CFLAGS="-D_CS_PATH=1"
 
 depends =
 

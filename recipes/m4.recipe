@@ -13,6 +13,7 @@ source =
 
 env_vars =
     ac_cv_func_strerror_r_char_p=no
+    CFLAGS="-D__USE_FORTIFY_LEVEL=2"
 
 depends =
 
