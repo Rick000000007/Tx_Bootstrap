@@ -486,7 +486,7 @@ jobs:
             TX-Packages Release ${{ github.ref_name }}
             
             ## Downloads
-            - **Bootstrap Image**: `bootstrap.tar.zst` - Complete TX Linux userspace
+            - **Bootstrap Image**: `bootstrap.tar.gz` - Complete TX Linux userspace
             - **Package Repository**: See `tx-repository` artifact
             
             ## Target Platform
@@ -497,7 +497,7 @@ jobs:
             ## Installation
             Download the bootstrap tarball and extract to your Android device:
             ```bash
-            tar --zstd -xf bootstrap.tar.zst -C /data/data/tx.packages/files/
+            tar -xf bootstrap.tar.gz -C /data/data/tx.packages/files/
             ```
           draft: false
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}

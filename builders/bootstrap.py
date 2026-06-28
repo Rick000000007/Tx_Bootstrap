@@ -304,7 +304,7 @@ set bell-style none
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # Paths
-        bootstrap_tar = self.output_dir / f"{name}.tar.zst"
+        bootstrap_tar = self.output_dir / f"{name}.tar.gz"
         bootstrap_json = self.output_dir / f"{name}.json"
         sha256_file = self.output_dir / "SHA256SUMS"
 
@@ -312,38 +312,14 @@ set bell-style none
         bootstrap_json.write_text(manifest.to_json())
         logger.info(f"Manifest written: {bootstrap_json}")
 
-        # Create tar.zst archive
-        logger.info(f"Creating {name}.tar.zst...")
-        try:
-            import zstandard as zstd
-            cctx = zstd.ZstdCompressor(level=19)
-
-            # Create tar
-            tar_buffer = __import__('io').BytesIO()
-            with tarfile.open(fileobj=tar_buffer, mode='w') as tf:
-                # Add manifest
-                tf.add(bootstrap_json, arcname="bootstrap.json")
-
-                # Add prefix contents
-                for item in prefix.rglob("*"):
-                    if item.is_file() or item.is_dir():
-                        arcname = str(item.relative_to(prefix))
-                        tf.add(item, arcname=arcname)
-
-            # Compress
-            compressed = cctx.compress(tar_buffer.getvalue())
-            bootstrap_tar.write_bytes(compressed)
-
-        except ImportError:
-            # Fallback to tar.gz
-            logger.warning("zstandard not available, using gzip compression")
-            bootstrap_tar = self.output_dir / f"{name}.tar.gz"
-            with tarfile.open(bootstrap_tar, 'w:gz', compresslevel=9) as tf:
-                tf.add(bootstrap_json, arcname="bootstrap.json")
-                for item in prefix.rglob("*"):
-                    if item.is_file() or item.is_dir():
-                        arcname = str(item.relative_to(prefix))
-                        tf.add(item, arcname=arcname)
+        # Create tar.gz archive
+        logger.info(f"Creating {name}.tar.gz...")
+        with tarfile.open(bootstrap_tar, 'w:gz', compresslevel=9) as tf:
+            tf.add(bootstrap_json, arcname="bootstrap.json")
+            for item in prefix.rglob("*"):
+                if item.is_file() or item.is_dir():
+                    arcname = str(item.relative_to(prefix))
+                    tf.add(item, arcname=arcname)
 
         # Calculate SHA-256
         sha256 = hashlib.sha256(bootstrap_tar.read_bytes()).hexdigest()
