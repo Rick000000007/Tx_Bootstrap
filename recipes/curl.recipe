@@ -17,6 +17,9 @@ configure_args =
     --without-ca-path
     --without-ca-fallback
 
+env_vars =
+    LIBS=-ldl
+
 depends =
     openssl
     zlib
@@ -24,4 +27,3 @@ depends =
     libssh2
 
 makedepends =
-

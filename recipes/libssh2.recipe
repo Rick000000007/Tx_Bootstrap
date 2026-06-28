@@ -14,8 +14,11 @@ source =
 configure_args =
     --with-crypto=openssl
 
+env_vars =
+    LIBS=-ldl
+
 depends =
     openssl
     zlib
 
-
+makedepends =

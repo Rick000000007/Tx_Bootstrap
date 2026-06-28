@@ -14,6 +14,9 @@ source =
 configure_args =
     --with-json=no
 
+pre_build_cmds =
+    python3 -c "import sys; code = open('src/exthdr.c').read(); patch = '\nstruct nft_ip6_rthdr0 {\n    struct ip6_rthdr ip6r0_hdr;\n    struct in6_addr ip6r0_addr[1];\n};\n'; code = code.replace('#include <netinet/ip6.h>', '#include <netinet/ip6.h>' + patch).replace('struct ip6_rthdr0', 'struct nft_ip6_rthdr0'); open('src/exthdr.c', 'w').write(code)"
+
 depends =
     libmnl
     libnftnl

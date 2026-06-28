@@ -18,10 +18,25 @@ env_vars =
     ac_cv_iconv_omits_bom=no
     ac_cv_snprintf_returns_bogus=no
 
+configure_args =
+    --with-curl
+    --with-expat
+    --with-shell=/data/data/tx.packages/files/usr/bin/sh
+    --without-tcltk
+
+make_args =
+    NO_NSEC=1
+    NO_GETTEXT=1
+    NO_INSTALL_HARDLINKS=1
+    CSPRNG_METHOD=openssl
+    PERL_PATH=/data/data/tx.packages/files/usr/bin/perl
+    USE_LIBPCRE2=1
+
 depends =
     openssl
     curl
     zlib
     expat
+    pcre2
 
 makedepends =

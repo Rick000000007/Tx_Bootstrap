@@ -17,6 +17,7 @@ configure_args =
 
 env_vars =
     CFLAGS=-Wno-error
+    ac_cv_type_epoll_data_t=yes
 
 depends =
 
