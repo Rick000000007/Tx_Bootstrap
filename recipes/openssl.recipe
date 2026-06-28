@@ -14,7 +14,7 @@ source =
 pre_build_cmds =
     ANDROID_NDK_ROOT="${ANDROID_NDK}" ./Configure android-arm64 -D__ANDROID_API__=29 --prefix=/data/data/tx.packages/files/usr no-shared no-tests
     make -j4
-    make install_sw install_ssldirs DESTDIR="${DESTDIR}/openssl"
+    make install_sw install_ssldirs DESTDIR="${DESTDIR}"
 
 depends =
 
