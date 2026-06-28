@@ -14,7 +14,7 @@ source =
 pre_build_cmds =
     echo "PREFIX=/data/data/tx.packages/files/usr" > configure.local
     echo "CC=\"${CC}\"" >> configure.local
-    echo "CFLAGS=\"${CFLAGS} -std=c99 -DNULL=0\"" >> configure.local
+    echo "CFLAGS=\"${CFLAGS} -DNULL=0\"" >> configure.local
     echo "LDFLAGS=\"${LDFLAGS}\"" >> configure.local
     echo "HAVE_STRLCAT=1" >> configure.local
     echo "HAVE_STRLCPY=1" >> configure.local

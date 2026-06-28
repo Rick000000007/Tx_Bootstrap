@@ -14,6 +14,7 @@ source =
 env_vars =
     ac_cv_func_strerror_r_char_p=no
     LIBS=-ldummy_tz
+    CFLAGS=-D_CS_PATH=1
 
 depends =
 

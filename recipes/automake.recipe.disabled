@@ -1,4 +1,4 @@
-name = automake
+﻿name = automake
 version = 1.17
 category = build-tools
 description = GNU Automake - tool for generating Makefile.in files

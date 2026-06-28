@@ -14,6 +14,9 @@ source =
 configure_args =
     --disable-posixmq
 
+env_vars =
+    ac_cv_header_resolv_h=no
+
 depends =
     openssl
     readline

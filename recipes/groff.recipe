@@ -14,8 +14,8 @@ source =
 configure_args =
     --without-doc
 
-post_build_cmds =
-    true
+make_args =
+    -C src
 
 depends =
 

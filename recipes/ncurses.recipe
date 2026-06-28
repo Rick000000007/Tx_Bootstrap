@@ -9,7 +9,7 @@ release = 1
 build_style = gnu
 
 source =
-    https://invisible-mirror.net/archives/ncurses/ncurses-6.5.tar.gz    136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
+    https://invisible-island.net/archives/ncurses/ncurses-6.5.tar.gz    136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
 
 configure_args =
     --enable-widec
@@ -21,9 +21,9 @@ configure_args =
     --program-prefix=
 
 post_install_cmds =
-    LIBDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib" && for lib in ncurses form panel menu; do ln -sf lib${lib}w.a "${LIBDIR}/lib${lib}.a"; done
-    INCDIR="${DESTDIR}/data/data/tx.packages/files/usr/include" && ln -sf ncursesw "${INCDIR}/ncurses" && for h in ncurses.h curses.h term.h; do test -f "${INCDIR}/ncursesw/${h}" && ln -sf "ncursesw/${h}" "${INCDIR}/${h}"; done
-    PKGDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib/pkgconfig" && test -f "${PKGDIR}/ncursesw.pc" && ln -sf ncursesw.pc "${PKGDIR}/ncurses.pc"
+    LIBDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib" && mkdir -p "${LIBDIR}" && for lib in ncurses form panel menu; do ln -sf lib${lib}w.a "${LIBDIR}/lib${lib}.a"; done
+    INCDIR="${DESTDIR}/data/data/tx.packages/files/usr/include" && mkdir -p "${INCDIR}" && ln -sf ncursesw "${INCDIR}/ncurses" && for h in ncurses.h curses.h term.h; do test -f "${INCDIR}/ncursesw/${h}" && ln -sf "ncursesw/${h}" "${INCDIR}/${h}"; done
+    PKGDIR="${DESTDIR}/data/data/tx.packages/files/usr/lib/pkgconfig" && mkdir -p "${PKGDIR}" && test -f "${PKGDIR}/ncursesw.pc" && ln -sf ncursesw.pc "${PKGDIR}/ncurses.pc"
 
 make_args =
     INSTALL="install -c"
