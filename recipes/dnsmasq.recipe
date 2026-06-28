@@ -13,8 +13,6 @@ source =
 
 make_args =
     COPTS=-DETHER_ADDR_LEN=6 -DNO_IPSET -DNO_CONNTRACK
-
-env_vars =
     LDFLAGS=-llog
 
 depends =
