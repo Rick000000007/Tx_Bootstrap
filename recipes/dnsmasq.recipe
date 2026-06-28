@@ -11,11 +11,9 @@ build_style = make
 source =
     https://thekelleys.org.uk/dnsmasq/dnsmasq-2.90.tar.gz    8f6666b542403b5ee7ccce66ea73a4a51cf19dd49392aaccd37231a2c51b303b
 
-env_vars =
-    CFLAGS=-DETHER_ADDR_LEN=6
+make_args =
+    COPTS=-DETHER_ADDR_LEN=6 -DNO_IPSET -DNO_CONNTRACK
 
 depends =
-    libidn2
-    nettle
 
 makedepends =

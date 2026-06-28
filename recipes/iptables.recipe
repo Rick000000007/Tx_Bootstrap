@@ -14,9 +14,11 @@ source =
 pre_build_cmds =
     sed -i 's/O_PATH/XT_O_PATH/g' extensions/libxt_cgroup.c
 
+env_vars =
+    CFLAGS=-Dindex=strchr
+
 depends =
     libnftnl
     libmnl
 
 makedepends =
-

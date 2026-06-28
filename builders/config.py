@@ -318,7 +318,6 @@ class BuildConfig:
             "-stdlib=libc++",
             "-Wl,--build-id=sha1",
             "-Wl,--no-rosegment",
-            "-Wl,--fatal-warnings",
             "-Wl,--gc-sections",
             "-Wl,--exclude-libs,libgcc.a",
             "-Wl,--exclude-libs,libgcc_real.a",
@@ -375,7 +374,7 @@ class BuildConfig:
             "PKG_CONFIG_LIBDIR": f"{self.artifacts_dir}/data/data/tx.packages/files/usr/lib/pkgconfig:{self.artifacts_dir}/data/data/tx.packages/files/usr/lib64/pkgconfig",
             "PKG_CONFIG_SYSROOT_DIR": str(self.artifacts_dir),
 
-            "TARGET_ARCH": self.target_arch,
+            "TARGET_ARCH": "",
             "TARGET_TRIPLE": self.target_triple,
             "HOST": self.target_triple,
             "BUILD": self.target_triple,

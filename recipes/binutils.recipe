@@ -13,9 +13,10 @@ source =
 
 configure_args =
     --disable-werror
+    --disable-gprofng
+    --disable-gdb
+    --disable-gdbserver
 
 depends =
 
-
 makedepends =
-

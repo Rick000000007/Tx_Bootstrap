@@ -11,7 +11,9 @@ build_style = gnu
 source =
     https://mirrors.kernel.org/gnu/diffutils/diffutils-3.10.tar.xz    90e5e93cc724e4ebe12ede80df1634063c7a855692685919bfe60b556c9bd09e
 
-
+env_vars =
+    LIBS=-ldummy_tz
+    ac_cv_func_strerror_r_char_p=no
 
 depends =
 

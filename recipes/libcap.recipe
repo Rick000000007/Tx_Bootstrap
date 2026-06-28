@@ -13,7 +13,8 @@ source =
 
 make_args =
     BUILD_CC=gcc
-    OBJCOPY=llvm-objcopy
+    DYNAMIC=no
+    lib=lib
 
 depends =
 
