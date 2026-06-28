@@ -15,7 +15,7 @@ make_args =
     BUILD_CC=gcc
     DYNAMIC=no
     lib=lib
-    OBJCOPY=$(OBJCOPY)
+    OBJCOPY=llvm-objcopy
 
 depends =
 

@@ -353,6 +353,7 @@ class BuildConfig:
             "ANDROID_NDK_HOME": str(self.ndk_path) if self.ndk_path else "",
             "ANDROID_API": str(self.min_api_level),
             "ANDROID_ABI": self.target_abi,
+            "PATH": f"{self.llvm_path}{os.pathsep}{os.environ.get('PATH', '')}" if self.llvm_path else os.environ.get("PATH", ""),
 
             "CC": f"{self.clang_path} --target={triple_with_api} --sysroot={self.sysroot}" if self.clang_path else "clang",
             "CXX": f"{self.clang_pp_path} --target={triple_with_api} --sysroot={self.sysroot}" if self.clang_pp_path else "clang++",
