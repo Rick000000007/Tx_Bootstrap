@@ -337,7 +337,7 @@ jobs:
         with:
           name: tx-bootstrap
           path: |
-            output/bootstrap.*
+            output/Tx_bootstrap.*
             output/SHA256SUMS
           retention-days: 14
 
@@ -375,7 +375,6 @@ jobs:
           name: tx-repository
           path: |
             repository/
-            repository-root/
           retention-days: 14
 
   # Run tests
@@ -480,13 +479,13 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            release-artifacts/tx-bootstrap/bootstrap.*
+            release-artifacts/tx-bootstrap/Tx_bootstrap.*
             release-artifacts/tx-repository/**/*
           body: |
             TX-Packages Release ${{ github.ref_name }}
             
             ## Downloads
-            - **Bootstrap Image**: `bootstrap.tar.gz` - Complete TX Linux userspace
+            - **Bootstrap Image**: `Tx_bootstrap.tar.gz` - Complete TX Linux userspace
             - **Package Repository**: See `tx-repository` artifact
             
             ## Target Platform
@@ -497,7 +496,7 @@ jobs:
             ## Installation
             Download the bootstrap tarball and extract to your Android device:
             ```bash
-            tar -xf bootstrap.tar.gz -C /data/data/tx.packages/files/
+            tar -xf Tx_bootstrap.tar.gz -C /data/data/tx.packages/files/
             ```
           draft: false
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
@@ -519,7 +518,7 @@ jobs:
         with:
           tag_name: nightly
           files: |
-            nightly-artifacts/tx-bootstrap/bootstrap.*
+            nightly-artifacts/tx-bootstrap/Tx_bootstrap.*
           body: |
             TX-Packages Nightly Build
             

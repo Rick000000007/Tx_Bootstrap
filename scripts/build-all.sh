@@ -229,7 +229,7 @@ config = BuildConfig()
 parser = RecipeParser(config.recipes_dir)
 recipes = parser.load_all()
 
-# Separate recipes into standard and root
+# Separate recipes into standard only
 from builders.dependency import DependencyResolver
 resolver = DependencyResolver(recipes)
 
@@ -240,19 +240,10 @@ try:
 except Exception as e:
     standard_recipes = [recipes[p] for p in config.bootstrap_base_packages if p in recipes]
 
-root_targets = [p for p in config.root_packages if p in recipes]
-try:
-    root_names = resolver.resolve(root_targets)
-    root_recipes = [recipes[name] for name in root_names if name in recipes]
-except Exception as e:
-    root_recipes = [recipes[p] for p in config.root_packages if p in recipes]
-
 generator = BootstrapGenerator(config)
 try:
-    path_std = generator.generate(standard_recipes, config.packages_dir, 'bootstrap')
+    path_std = generator.generate(standard_recipes, config.packages_dir, 'Tx_bootstrap')
     print(f'Standard Bootstrap: {path_std}')
-    path_root = generator.generate(root_recipes, config.packages_dir, 'bootstrap-root')
-    print(f'Root Bootstrap: {path_root}')
 except Exception as e:
     print(f'WARNING: Bootstrap generation failed: {e}')
     print('This is expected if package builds failed.')

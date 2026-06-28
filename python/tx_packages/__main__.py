@@ -63,7 +63,8 @@ def cmd_build(args: argparse.Namespace) -> int:
                 logger.error(f"Recipe not found: {pkg_name}")
                 return 1
     else:
-        target_packages = list(recipes.keys())
+        # Filter out root-required packages
+        target_packages = [name for name in recipes.keys() if name not in config.root_packages]
 
     # Resolve dependencies
     try:
@@ -133,10 +134,10 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
         if args.packages:
             target_packages = args.packages.split(',')
             bootstrap_recipes = [recipes[p] for p in target_packages if p in recipes]
-            bootstrap_path = generator.generate(bootstrap_recipes, config.packages_dir, "bootstrap")
+            bootstrap_path = generator.generate(bootstrap_recipes, config.packages_dir, "Tx_bootstrap")
             logger.info(f"Bootstrap generated: {bootstrap_path}")
         else:
-            # Generate both standard and root bootstraps
+            # Generate standard bootstrap only
             resolver = DependencyResolver(recipes)
 
             # Resolve standard bootstrap packages recursively
@@ -148,20 +149,8 @@ def cmd_bootstrap(args: argparse.Namespace) -> int:
                 logger.warning(f"Failed to resolve standard bootstrap dependencies: {e}. Falling back to list.")
                 standard_recipes = [recipes[p] for p in config.bootstrap_base_packages if p in recipes]
 
-            # Resolve root bootstrap packages recursively
-            root_targets = [p for p in config.root_packages if p in recipes]
-            try:
-                root_names = resolver.resolve(root_targets)
-                root_recipes = [recipes[name] for name in root_names if name in recipes]
-            except Exception as e:
-                logger.warning(f"Failed to resolve root bootstrap dependencies: {e}. Falling back to list.")
-                root_recipes = [recipes[p] for p in config.root_packages if p in recipes]
-
-            path_std = generator.generate(standard_recipes, config.packages_dir, "bootstrap")
+            path_std = generator.generate(standard_recipes, config.packages_dir, "Tx_bootstrap")
             logger.info(f"Standard Bootstrap generated: {path_std}")
-
-            path_root = generator.generate(root_recipes, config.packages_dir, "bootstrap-root")
-            logger.info(f"Root Bootstrap generated: {path_root}")
     except Exception as e:
         logger.error(f"Bootstrap generation failed: {e}")
         return 1
@@ -185,17 +174,12 @@ def cmd_repository(args: argparse.Namespace) -> int:
             repo_dir = generator.generate(list(recipes.values()), Path(args.output))
             logger.info(f"Repository generated: {repo_dir}")
         else:
-            # Generate separate main and root repositories
+            # Generate main repository for standard packages only
             standard_recipes = [r for r in recipes.values() if r.name not in config.root_packages]
-            root_recipes = [r for r in recipes.values() if r.name in config.root_packages]
 
             # Main repository
             repo_std = generator.generate(standard_recipes, config.repository_dir)
             logger.info(f"Standard Repository generated: {repo_std}")
-
-            # Root repository
-            repo_root = generator.generate(root_recipes, config.repository_dir.parent / "repository-root")
-            logger.info(f"Root Repository generated: {repo_root}")
     except Exception as e:
         logger.error(f"Repository generation failed: {e}")
         return 1
