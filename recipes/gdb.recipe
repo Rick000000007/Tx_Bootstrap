@@ -11,6 +11,9 @@ build_style = gnu
 source =
     https://mirrors.kernel.org/gnu/gdb/gdb-16.2.tar.xz    4002cb7f23f45c37c790536a13a720942ce4be0402d929c9085e92f10d480119
 
+pre_build_cmds =
+    python3 -c "code = open('gdbsupport/eintr.h').read(); code = code.replace('::open, pathname, flags', '[](const char *p, int f) { return ::open(p, f); }, pathname, flags'); open('gdbsupport/eintr.h', 'w').write(code)"
+
 depends =
     ncurses
     expat

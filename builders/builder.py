@@ -396,6 +396,7 @@ class PackageBuilder:
 
         cmake_args = [
             f'-DCMAKE_TOOLCHAIN_FILE={self.config.ndk_path}/build/cmake/android.toolchain.cmake',
+            f'-DCMAKE_FIND_ROOT_PATH={self.config.artifacts_dir}/data/data/tx.packages/files/usr;{self.config.ndk_path}/toolchains/llvm/prebuilt/linux-x86_64/sysroot',
             f'-DANDROID_ABI={self.config.target_abi}',
             f'-DANDROID_NATIVE_API_LEVEL={self.config.min_api_level}',
             f'-DANDROID_PLATFORM=android-{self.config.min_api_level}',

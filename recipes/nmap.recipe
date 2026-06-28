@@ -7,11 +7,14 @@ license = GPL-2.0-only
 epoch = 0
 release = 1
 build_style = gnu
+build_dir = .
 
 source =
     https://nmap.org/dist/nmap-7.95.tar.bz2    e14ab530e47b5afd88f1c8a2bac7f89cd8fe6b478e22d255c5b9bddb7a1c5778
 
-build_dir = .
+configure_args =
+    --without-zenmap
+    --without-ndiff
 
 depends =
     openssl
@@ -22,4 +25,3 @@ depends =
     zlib
 
 makedepends =
-

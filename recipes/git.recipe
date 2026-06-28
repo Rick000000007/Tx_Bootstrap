@@ -21,7 +21,6 @@ env_vars =
 configure_args =
     --with-curl
     --with-expat
-    --with-shell=/data/data/tx.packages/files/usr/bin/sh
     --without-tcltk
 
 make_args =
@@ -31,6 +30,10 @@ make_args =
     CSPRNG_METHOD=openssl
     PERL_PATH=/data/data/tx.packages/files/usr/bin/perl
     USE_LIBPCRE2=1
+    SHELL_PATH=/bin/sh
+
+post_install_cmds =
+    find . -type f -exec sed -i 's|^#!/bin/sh|#!/data/data/tx.packages/files/usr/bin/sh|g' {} +
 
 depends =
     openssl

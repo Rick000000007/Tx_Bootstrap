@@ -289,6 +289,8 @@ class BuildConfig:
         self.cflags = [
             f"--target={triple_with_api}",
             f"--sysroot={self.sysroot}",
+            f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include",
+            f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include/ncursesw",
             f"-march=armv8-a",
             f"-O{self.optimize.lstrip('O')}" if self.optimize.startswith('O') else f"-{self.optimize}",
             "-fPIC",

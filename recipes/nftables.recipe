@@ -16,6 +16,7 @@ configure_args =
 
 pre_build_cmds =
     python3 -c "import sys; code = open('src/exthdr.c').read(); patch = '\nstruct nft_ip6_rthdr0 {\n    uint8_t ip6r0_nxt;\n    uint8_t ip6r0_len;\n    uint8_t ip6r0_type;\n    uint8_t ip6r0_segleft;\n    uint32_t ip6r0_reserved;\n    struct in6_addr ip6r0_addr[1];\n};\n'; code = code.replace('#include <netinet/ip6.h>', '#include <netinet/ip6.h>' + patch).replace('struct ip6_rthdr0', 'struct nft_ip6_rthdr0'); open('src/exthdr.c', 'w').write(code)"
+    python3 -c "import sys, re; code = open('include/headers.h').read(); code = re.sub(r'struct\s+ipv6hdr\s*\{[^}]+\};', r'#ifndef __ANDROID__\n\g<0>\n#endif', code); open('include/headers.h', 'w').write(code)"
 
 depends =
     libmnl

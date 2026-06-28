@@ -7,6 +7,7 @@ license = PSF-2.0
 epoch = 0
 release = 1
 build_style = gnu
+extract_dir = Python-3.13.2
 
 source =
     https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz    d984bcc57cd67caab26f7def42e523b1c015bbc5dc07836cf4f0b63fa159eb56
@@ -20,4 +21,3 @@ depends =
     bzip2
 
 makedepends =
-
