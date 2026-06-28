@@ -6,11 +6,18 @@ homepage = https://infozip.org/
 license = Info-ZIP
 epoch = 0
 release = 1
-build_style = make
+build_style = custom
 extract_dir = zip30
 
 source =
     http://deb.debian.org/debian/pool/main/z/zip/zip_3.0.orig.tar.gz    f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369
+
+pre_build_cmds =
+    cp unix/Makefile Makefile
+    make -f unix/Makefile generic CC=clang LD=clang CF="${CFLAGS} -DBSD"
+
+post_install_cmds =
+    make -f unix/Makefile install prefix="${DESTDIR}/data/data/tx.packages/files/usr"
 
 depends =
 

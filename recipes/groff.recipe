@@ -15,7 +15,8 @@ configure_args =
     --without-doc
 
 make_args =
-    GROFF=true
+    GROFFBIN=true
+    GROFF_BIN_PATH=
 
 depends =
 

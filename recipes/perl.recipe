@@ -10,10 +10,10 @@ build_style = custom
 
 source =
     https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz    dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f
-    https://github.com/arsv/perl-cross/releases/download/1.6/perl-cross-1.6.tar.gz    5abf198ee50ce9e69eb68fede68c87f65241caa744e4203e97490fa59b45ed69
+    https://github.com/arsv/perl-cross/releases/download/1.6.1/perl-cross-1.6.1.tar.gz    b5f4b4457bbd7be37adac8ee423beedbcdba8963a85f79770f5e701dabc5550f
 
 pre_build_cmds =
-    cp -rf ../perl-cross-1.6/* .
+    cp -rf ../perl-cross-1.6.1/* .
     ./configure --prefix=/data/data/tx.packages/files/usr --host=aarch64-linux-android
 
 post_install_cmds =
