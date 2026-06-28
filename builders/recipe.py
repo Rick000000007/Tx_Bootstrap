@@ -324,13 +324,28 @@ class RecipeParser:
 
         return Recipe(**kwargs)
 
+    def _strip_quotes(self, s: str) -> str:
+        """Strip outer quotes from a string or its value part if it contains '='."""
+        s = s.strip()
+        if '=' in s:
+            k, v = s.split('=', 1)
+            k = k.strip()
+            v = v.strip()
+            if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
+                v = v[1:-1]
+            return f"{k}={v}"
+        else:
+            if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+                return s[1:-1]
+            return s
+
     def _parse_list(self, value: str) -> List[str]:
         """Parse a newline-separated list."""
         items = []
         for line in value.split('\n'):
             line = line.strip()
             if line and not line.startswith('#'):
-                items.append(line)
+                items.append(self._strip_quotes(line))
         return items
 
     def _parse_dict(self, value: str) -> Dict[str, str]:
@@ -340,7 +355,11 @@ class RecipeParser:
             line = line.strip()
             if line and not line.startswith('#') and '=' in line:
                 k, v = line.split('=', 1)
-                result[k.strip()] = v.strip()
+                k = k.strip()
+                v = v.strip()
+                if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
+                    v = v[1:-1]
+                result[k] = v
         return result
 
     def _parse_sources(self, value: str, recipe_dir: Path) -> List[SourceDefinition]:

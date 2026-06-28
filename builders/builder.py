@@ -64,7 +64,14 @@ class PackageBuilder:
                             "struct tm *localtime_rz(timezone_t tz, const time_t *t, struct tm *tm) { return localtime_r(t, tm); }\n"
                             "time_t mktime_z(timezone_t tz, struct tm *tm) { return mktime(tm); }\n")
             try:
-                subprocess.run([str(self.config.clang_path), "-c", str(tz_c), "-o", str(tz_o)], check=True)
+                triple_with_api = f"{self.config.target_triple}{self.config.min_api_level}"
+                subprocess.run([
+                    str(self.config.clang_path),
+                    f"--target={triple_with_api}",
+                    f"--sysroot={self.config.sysroot}",
+                    "-c", str(tz_c),
+                    "-o", str(tz_o)
+                ], check=True)
                 subprocess.run([str(self.config.ar_path), "rcs", str(libdummy_tz_a), str(tz_o)], check=True)
             except Exception as e:
                 logger.error(f"Failed to create dummy libdummy_tz.a: {e}")
@@ -438,6 +445,10 @@ class PackageBuilder:
         cross_file = self.config.configs_dir / "android-cross.ini"
         cross_file.parent.mkdir(parents=True, exist_ok=True)
 
+        c_args_str = ", ".join(f"'{flag}'" for flag in self.config.cflags)
+        cpp_args_str = ", ".join(f"'{flag}'" for flag in self.config.cxxflags)
+        link_args_str = ", ".join(f"'{flag}'" for flag in self.config.ldflags)
+
         content = f"""[binaries]
 c = '{self.config.clang_path}'
 cpp = '{self.config.clang_pp_path}'
@@ -456,6 +467,12 @@ endian = 'little'
 [properties]
 needs_exe_wrapper = true
 sys_root = '{self.config.sysroot}'
+
+[built-in options]
+c_args = [{c_args_str}]
+cpp_args = [{cpp_args_str}]
+c_link_args = [{link_args_str}]
+cpp_link_args = [{link_args_str}]
 """
         cross_file.write_text(content)
         return cross_file
