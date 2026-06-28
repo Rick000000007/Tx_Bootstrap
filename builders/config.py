@@ -325,13 +325,13 @@ class BuildConfig:
             "-Wl,--exclude-libs,libgcc_real.a",
             "-Wl,--exclude-libs,libunwind.a",
             "-Wl,--undefined-version",
+            "-ldummy_tz",
         ]
 
         self.cppflags = [
             f"-I{self.sysroot}/usr/include/{self.target_triple}",
             f"-I{self.artifacts_dir}/data/data/tx.packages/files/usr/include",
             "-DANDROID",
-            f"-D__ANDROID_API__={self.min_api_level}",
             "-D_GNU_SOURCE",
         ]
 
@@ -366,6 +366,7 @@ class BuildConfig:
             "NM": str(self.nm_path) if self.nm_path else "nm",
             "OBJDUMP": str(self.objdump_path) if self.objdump_path else "objdump",
             "READELF": str(self.readelf_path) if self.readelf_path else "readelf",
+            "OBJCOPY": str(self.llvm_path / "llvm-objcopy") if self.llvm_path else "objcopy",
 
             "CFLAGS": " ".join(self.cflags),
             "CXXFLAGS": " ".join(self.cxxflags),

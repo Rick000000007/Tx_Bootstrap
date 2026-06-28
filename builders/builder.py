@@ -53,6 +53,22 @@ class PackageBuilder:
         if not libpthread_a.exists():
             libpthread_a.write_bytes(b"!<arch>\n")
 
+        libdummy_tz_a = lib_dir / "libdummy_tz.a"
+        if not libdummy_tz_a.exists() and self.config.clang_path and self.config.ar_path:
+            tz_c = self.config.artifacts_dir / "dummy_tz.c"
+            tz_o = self.config.artifacts_dir / "dummy_tz.o"
+            tz_c.write_text("#include <time.h>\n"
+                            "typedef void* timezone_t;\n"
+                            "timezone_t tzalloc(const char *name) { return (timezone_t)0; }\n"
+                            "void tzfree(timezone_t tz) {}\n"
+                            "struct tm *localtime_rz(timezone_t tz, const time_t *t, struct tm *tm) { return localtime_r(t, tm); }\n"
+                            "time_t mktime_z(timezone_t tz, struct tm *tm) { return mktime(tm); }\n")
+            try:
+                subprocess.run([str(self.config.clang_path), "-c", str(tz_c), "-o", str(tz_o)], check=True)
+                subprocess.run([str(self.config.ar_path), "rcs", str(libdummy_tz_a), str(tz_o)], check=True)
+            except Exception as e:
+                logger.error(f"Failed to create dummy libdummy_tz.a: {e}")
+
     def register_callback(self, callback: Callable[[str, str, bool], None]) -> None:
         """Register a build progress callback.
 
