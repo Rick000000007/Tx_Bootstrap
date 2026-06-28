@@ -114,14 +114,14 @@ jobs:
 
       - name: Validate all recipes
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m tx_packages list 2>&1 | head -50
           echo "---"
           python3 builders/recipe.py --validate-all || true
 
       - name: Run recipe parser tests
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m pytest tests/test_recipe_parser.py -v --tb=short || true
 
   # Dependency resolution test
@@ -140,7 +140,7 @@ jobs:
 
       - name: Test dependency resolution
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -c "
           from builders.recipe import RecipeParser
           from builders.dependency import DependencyResolver
@@ -182,7 +182,7 @@ jobs:
 
       - name: Download sources
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           mkdir -p downloads
           python3 -c "
           from builders.recipe import RecipeParser
@@ -258,7 +258,7 @@ jobs:
 
       - name: Build all packages sequentially
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m tx_packages build
 
       - name: Upload build artifacts
@@ -295,7 +295,7 @@ jobs:
 
       - name: Generate .txpkg files
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           mkdir -p packages
           if [ -d "artifacts-temp/packages" ]; then
             cp -r artifacts-temp/packages/* packages/
@@ -327,7 +327,7 @@ jobs:
 
       - name: Generate bootstrap image
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m tx_packages bootstrap
 
       - name: Upload bootstrap
@@ -364,7 +364,7 @@ jobs:
 
       - name: Generate repository
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m tx_packages repository
 
       - name: Upload repository
@@ -397,12 +397,12 @@ jobs:
 
       - name: Run test suite
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m pytest tests/ -v --tb=short || true
 
       - name: Generate test report
         run: |
-          export PYTHONPATH="${{ github.workspace }}:$PYTHONPATH"
+          export PYTHONPATH="${{ github.workspace }}/python:${{ github.workspace }}:$PYTHONPATH"
           python3 -m pytest tests/ -v --tb=short --junitxml=output/test-results.xml || true
 
       - name: Upload test results
@@ -430,6 +430,7 @@ jobs:
 
       - name: Generate report
         run: |
+          mkdir -p output
           cat > output/build-report.md << 'EOF'
           # TX-Packages Build Report
           
