@@ -159,11 +159,21 @@ class BootstrapGenerator:
                 target_path = prefix / member.name[len(".TXPKG/ROOT/"):]
                 target_path.parent.mkdir(parents=True, exist_ok=True)
 
-                f = tf.extractfile(member)
-                if f:
-                    target_path.write_bytes(f.read())
-
-                    # Set permissions
+                if member.issym():
+                    # Handle symlinks
+                    if target_path.exists() or target_path.is_symlink():
+                        target_path.unlink()
+                    os.symlink(member.linkname, target_path)
+                elif member.isfile():
+                    # Extract regular file
+                    f = tf.extractfile(member)
+                    if f:
+                        target_path.write_bytes(f.read())
+                        # Set permissions
+                        os.chmod(target_path, member.mode)
+                elif member.isdir():
+                    # Ensure directory exists
+                    target_path.mkdir(parents=True, exist_ok=True)
                     os.chmod(target_path, member.mode)
 
     def _generate_config_files(self, prefix: Path) -> None:
