@@ -157,14 +157,39 @@ class BootstrapGenerator:
             if member.name.startswith(".TXPKG/ROOT/"):
                 # Extract to prefix
                 target_path = prefix / member.name[len(".TXPKG/ROOT/"):]
+                
+                if target_path.exists() or target_path.is_symlink():
+                    try:
+                        if target_path.is_dir() and not target_path.is_symlink():
+                            shutil.rmtree(target_path)
+                        else:
+                            target_path.unlink()
+                    except Exception as e:
+                        logger.warning(f"Failed to remove existing path {target_path}: {e}")
+
                 target_path.parent.mkdir(parents=True, exist_ok=True)
 
-                f = tf.extractfile(member)
-                if f:
-                    target_path.write_bytes(f.read())
-
-                    # Set permissions
-                    os.chmod(target_path, member.mode)
+                try:
+                    if member.issym():
+                        # Create symbolic link
+                        target_path.symlink_to(member.linkname)
+                    elif member.islnk():
+                        # Create hard link
+                        if member.linkname.startswith(".TXPKG/ROOT/"):
+                            link_target = prefix / member.linkname[len(".TXPKG/ROOT/"):]
+                        else:
+                            link_target = prefix / member.linkname.lstrip("/")
+                        os.link(link_target, target_path)
+                    elif member.isreg():
+                        # Regular file
+                        f = tf.extractfile(member)
+                        if f:
+                            target_path.write_bytes(f.read())
+                            os.chmod(target_path, member.mode)
+                    elif member.isdir():
+                        target_path.mkdir(parents=True, exist_ok=True)
+                except Exception as e:
+                    logger.error(f"Failed to extract member {member.name}: {e}")
 
     def _generate_config_files(self, prefix: Path) -> None:
         """Generate default system configuration files."""
@@ -290,10 +315,14 @@ set bell-style none
         # Calculate checksum
         hasher = hashlib.sha256()
         for f in sorted(prefix.rglob("*"), key=lambda x: str(x.relative_to(prefix))):
-            if f.is_file():
+            if f.is_file() and not f.is_symlink():
                 rel_path = str(f.relative_to(prefix))
                 hasher.update(rel_path.encode())
                 hasher.update(f.read_bytes())
+            elif f.is_symlink():
+                rel_path = str(f.relative_to(prefix))
+                hasher.update(rel_path.encode())
+                hasher.update(os.readlink(f).encode())
 
         manifest.checksum = hasher.hexdigest()
 
@@ -317,9 +346,9 @@ set bell-style none
         with tarfile.open(bootstrap_tar, 'w:gz', compresslevel=9) as tf:
             tf.add(bootstrap_json, arcname="bootstrap.json")
             for item in prefix.rglob("*"):
-                if item.is_file() or item.is_dir():
+                if item.is_file() or item.is_dir() or item.is_symlink():
                     arcname = str(item.relative_to(prefix))
-                    tf.add(item, arcname=arcname)
+                    tf.add(item, arcname=arcname, recursive=False)
 
         # Calculate SHA-256
         sha256 = hashlib.sha256(bootstrap_tar.read_bytes()).hexdigest()
